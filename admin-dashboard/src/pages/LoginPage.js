@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
 
   const onChangeHandler = function (event) {
-    const { name, value } = event.currentTarget;
+    const { name, value } = event.currentTarget
 
     if (name === 'email') setEmail(value);
     if (name === 'password') setPassword(value);
