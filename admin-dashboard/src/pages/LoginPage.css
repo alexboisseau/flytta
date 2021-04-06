@@ -4,3 +4,11 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+#formContainer {
+  background-color: #0b1f51;
+}
+
+#submit-button {
+  color: #0b1f51;
+}

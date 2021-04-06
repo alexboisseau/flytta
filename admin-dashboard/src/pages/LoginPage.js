@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
 
   const onChangeHandler = function (event) {
-    const { name, value } = event.currentTarget
+    const { name, value } = event.currentTarget;
 
     if (name === 'email') setEmail(value);
     if (name === 'password') setPassword(value);
@@ -42,9 +42,9 @@ const LoginPage = () => {
         <form
           onSubmit={event => onSubmitHandler(event)}
           id="formContainer"
-          className="p-10 bg-blue-400 bg-opacity-90 rounded-xl flex flex-col justify-around items-center text-white"
+          className="px-24 py-10 bg-opacity-90 rounded-xl flex flex-col justify-around items-center text-white"
         >
-          <h1 className="mb-10 text-6xl text-center">Flytta Admin Dashboard</h1>
+          <h1 className="mb-10 text-6xl text-center">Flytta Admin</h1>
 
           <Input
             name="email"
@@ -63,7 +63,8 @@ const LoginPage = () => {
 
           <button
             type="submit"
-            className="px-5 py-3 mt-9 bg-white text-blue-400 rounded-full hover:bg-blue-600 hover:text-white"
+            className="px-5 py-3 mt-9 bg-white rounded-full hover:bg-gray-100 focus:outline-none"
+            id="submit-button"
           >
             Connexion
           </button>

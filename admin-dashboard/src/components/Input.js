@@ -6,7 +6,7 @@ const Input = ({ name, type, placeholder, value, onChange }) => {
       name={name}
       type={type}
       placeholder={placeholder}
-      className="block mb-1 p-2 rounded w-80 text-black"
+      className="block mb-1 p-2 rounded w-80 text-black focus:outline-none"
       value={value}
       onChange={event => onChange(event)}
     />

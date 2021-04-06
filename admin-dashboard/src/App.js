@@ -7,6 +7,8 @@ import UserContext from './providers/UserProvider';
 // PAGES AND COMPONENTS
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
+import UsersPage from './pages/UsersPage';
+import EventsPage from './pages/EventsPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -31,6 +33,12 @@ function App() {
   if (user) {
     routes = (
       <Switch>
+        <Route path="/users">
+          <UsersPage />
+        </Route>
+        <Route path="/events">
+          <EventsPage />
+        </Route>
         <Route path="/">
           <HomePage />
         </Route>
