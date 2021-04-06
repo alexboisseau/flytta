@@ -1,4 +1,7 @@
 import React, { useState, createContext } from 'react';
+import * as firebase from 'firebase';
+
+import { loginRequest, registerRequest } from './authentication.service';
 
 export const AuthenticationContext = createContext();
 
@@ -7,6 +10,60 @@ export const AuthenticationContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
+  firebase.auth().onAuthStateChanged((u) => {
+    if (u) {
+      setUser(u);
+    }
+    setIsLoading(false);
+  });
+
+  const onLogin = async (email, password) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const u = await loginRequest(email, password);
+      setUser(u);
+    } catch (e) {
+      setError(e.toString());
+    }
+
+    setIsLoading(false);
+  };
+
+  const onRegister = async (
+    firstName,
+    lastName,
+    city,
+    birthdayDate,
+    description,
+    email,
+    password,
+    repeatedPassword
+  ) => {
+    if (password !== repeatedPassword) {
+      setError('Les mots de passes ne correspondent pas');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const u = await registerRequest(email, password);
+      setUser(u);
+    } catch (e) {
+      setError(e.toString());
+    }
+
+    setIsLoading(false);
+  };
+
+  const onLogout = () => {
+    setUser(null);
+    firebase.auth().signOut();
+  };
+
   return (
     <AuthenticationContext.Provider
       value={{
@@ -14,9 +71,9 @@ export const AuthenticationContextProvider = ({ children }) => {
         user,
         isLoading,
         error,
-        onLogin: () => null,
-        onRegister: () => null,
-        onLogout: () => null,
+        onLogin,
+        onRegister,
+        onLogout,
       }}
     >
       {children}

@@ -14,6 +14,10 @@ export const AuthContainer = styled.View`
 `;
 
 export const AppTitle = styled.Text`
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  top: 100px;
   font-family: ${(props) => props.theme.fonts.roboto};
   font-size: ${(props) => props.theme.fontSizes.xxxxl};
   color: ${(props) => props.theme.colors.white};
@@ -45,4 +49,8 @@ export const Separator = styled.View`
   width: 300px;
   height: 1px;
   background-color: ${(props) => props.theme.colors.white};
+`;
+
+export const ErrorContainer = styled.View`
+  max-width: 300px;
 `;

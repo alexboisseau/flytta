@@ -4,4 +4,5 @@ export const colors = {
   bgWhite: '#F9FAFB',
   primary: '#fc9e39',
   primaryLight: '#f6bf42',
+  red: '#DC2626',
 };

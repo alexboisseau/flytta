@@ -7,21 +7,12 @@ const defaultTextStyles = (theme) => `
   margin-bottom: 0px;
 `;
 
-const base = (theme) => `
-  font-size: ${theme.fontSizes.base};
-`;
-
-const white = (theme) => `
-  color: ${theme.colors.white};
-`;
-
-const variants = { base, white };
-
 export const Text = styled.Text`
   ${({ theme }) => defaultTextStyles(theme)}
-  ${({ color, theme }) => variants[color](theme)}
+  ${({ color, theme }) => `color: ${theme.colors[color]};`}
   ${({ center }) => center && 'text-align: center;'}
   ${({ right }) => right && 'text-align: right;'}
+  ${({ bold, theme }) => bold && `font-weight: ${theme.fontWeights.bold};`}
 `;
 
 Text.defaultProps = {

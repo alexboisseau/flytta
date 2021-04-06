@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
+
+import { AuthenticationContext } from '../../services/authentication/authentication.context';
 
 import { SafeArea } from '../../components/utility/safe-area';
 import { Spacer } from '../../components/ui/spacer';
@@ -10,18 +13,20 @@ import {
   AuthButton,
   AuthButtonText,
   Separator,
+  ErrorContainer,
 } from './components/guest.styles';
 import { Text } from '../../components/ui/text';
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { onLogin, isLoading, error } = useContext(AuthenticationContext);
 
   return (
     <GuestBackground>
+      <AppTitle>Flytta</AppTitle>
       <SafeArea>
         <AuthContainer>
-          <AppTitle>Flytta</AppTitle>
           <Spacer position="top" size="xl">
             <Text center color="white">
               Bienvenue sur Flytta
@@ -35,6 +40,7 @@ export const LoginScreen = () => {
               autoCapitalize="none"
               value={email}
               keyboardType="email-address"
+              textContentType="emailAddress"
               onChangeText={(value) => setEmail(value)}
               placeholder="Email"
             />
@@ -42,10 +48,21 @@ export const LoginScreen = () => {
               <AuthInput
                 autoCapitalize="none"
                 value={password}
+                textContentType="password"
                 onChangeText={(value) => setPassword(value)}
+                secureTextEntry
                 placeholder="Mot de passe"
               />
             </Spacer>
+            {error && (
+              <Spacer size="lg">
+                <ErrorContainer>
+                  <Text color="red" bold>
+                    {error}
+                  </Text>
+                </ErrorContainer>
+              </Spacer>
+            )}
           </Spacer>
           <Spacer position="top" size="xl">
             <Separator />
@@ -53,12 +70,19 @@ export const LoginScreen = () => {
           <Spacer position="top" size="xl">
             <AuthButton
               color="primaryLight"
-              onPress={() => console.log('pressed!')}
+              onPress={() => onLogin(email, password)}
             >
-              <AuthButtonText color="white">Connexion</AuthButtonText>
+              {isLoading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <AuthButtonText color="white">Connexion</AuthButtonText>
+              )}
             </AuthButton>
             <Spacer size="lg">
-              <AuthButton color="white" onPress={() => console.log('pressed!')}>
+              <AuthButton
+                color="white"
+                onPress={() => navigation.navigate('Register')}
+              >
                 <AuthButtonText color="primary">Inscription</AuthButtonText>
               </AuthButton>
             </Spacer>
