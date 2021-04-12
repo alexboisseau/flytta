@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase';
+import { checkIsAdmin, getErrorMessage } from '../services/AuthService';
 import { Notyf } from 'notyf';
 
 // PAGES AND COMPONENTS
@@ -17,20 +18,28 @@ const LoginPage = () => {
     if (name === 'password') setPassword(value);
   };
 
-  const onSubmitHandler = function (event) {
+  const onSubmitHandler = async function (event) {
     event.preventDefault();
-    console.log(event);
 
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then(res => {
-        const successNotyf = new Notyf();
-        successNotyf.success('Vous êtes connecté 🎉');
-      })
-      .catch(error => {
-        const errorNotyf = new Notyf();
-        errorNotyf.error("Une erreur s'est produite, veuillez réessayer ❌");
-      });
+    try {
+      const isAdmin = await checkIsAdmin(email);
+      const notyf = new Notyf();
+
+      if (isAdmin) {
+        auth
+          .signInWithEmailAndPassword(email, password)
+          .then(res => {
+            notyf.success('Vous êtes connecté 🎉');
+          })
+          .catch(error => {
+            notyf.error(`${getErrorMessage(error.code)} 💥`);
+          });
+      } else {
+        notyf.error("Vous n'êtes pas administrateur de Flytta 💥");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
