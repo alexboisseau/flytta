@@ -12,6 +12,7 @@ export const Text = styled.Text`
   ${({ color, theme }) => `color: ${theme.colors[color]};`}
   ${({ center }) => center && 'text-align: center;'}
   ${({ right }) => right && 'text-align: right;'}
+  ${({ lg, theme }) => lg && `font-size: ${theme.fontSizes.lg}`}
   ${({ bold, theme }) => bold && `font-weight: ${theme.fontWeights.bold};`}
 `;
 

@@ -1,25 +1,49 @@
-import React, { useContext } from 'react';
-import { SafeAreaView, Text } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { AuthenticationContext } from '../../services/authentication/authentication.context';
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 
-const AppStack = createStackNavigator();
+import { EventsNavigator } from './events.navigator';
+import { ProfileScreen } from '../../screens/app/account/profile.screen';
+
+const TAB_ICON = {
+  Home: 'ios-home',
+  Events: 'ios-calendar',
+  Messages: 'ios-chatbubble-ellipses',
+  Profile: 'ios-person-circle',
+};
+
+const AppTab = createBottomTabNavigator();
+
+const tabBarIcon = (iconName) => ({ focused, color, size }) => (
+  <Ionicons
+    name={focused ? iconName : `${iconName}-outline`}
+    size={size}
+    color={color}
+  />
+);
+
+const createScreenOptions = ({ route }) => {
+  const iconName =
+    TAB_ICON[route.name === 'Evénements' ? 'Events' : route.name];
+  return {
+    tabBarIcon: tabBarIcon(iconName),
+    tabBarLabel: () => null,
+  };
+};
 
 export const AppNavigator = () => {
-  const { onLogout } = useContext(AuthenticationContext);
   return (
-    <AppStack.Navigator headerMode="none">
-      <AppStack.Screen
-        name="Home"
-        component={() => (
-          <SafeAreaView>
-            <TouchableOpacity onPress={onLogout}>
-              <Text>Logout</Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-        )}
-      />
-    </AppStack.Navigator>
+    <AppTab.Navigator
+      screenOptions={createScreenOptions}
+      tabBarOptions={{
+        activeTintColor: '#fc9e39',
+        inactiveTintColor: 'gray',
+      }}
+    >
+      <AppTab.Screen name="Home" component={() => null} />
+      <AppTab.Screen name="Evénements" component={EventsNavigator} />
+      <AppTab.Screen name="Messages" component={() => null} />
+      <AppTab.Screen name="Profile" component={ProfileScreen} />
+    </AppTab.Navigator>
   );
 };

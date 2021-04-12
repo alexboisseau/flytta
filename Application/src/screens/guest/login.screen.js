@@ -20,7 +20,9 @@ import { Text } from '../../components/ui/text';
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { onLogin, isLoading, error } = useContext(AuthenticationContext);
+  const { onLogin, isLoading, error, clearError } = useContext(
+    AuthenticationContext
+  );
 
   return (
     <GuestBackground>
@@ -81,7 +83,10 @@ export const LoginScreen = ({ navigation }) => {
             <Spacer size="lg">
               <AuthButton
                 color="white"
-                onPress={() => navigation.navigate('Register')}
+                onPress={() => {
+                  clearError();
+                  navigation.navigate('Register');
+                }}
               >
                 <AuthButtonText color="primary">Inscription</AuthButtonText>
               </AuthButton>

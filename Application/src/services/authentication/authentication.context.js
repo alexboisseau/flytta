@@ -10,10 +10,12 @@ export const AuthenticationContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
+  const clearError = () => {
+    setError(null);
+  };
+
   firebase.auth().onAuthStateChanged((u) => {
-    if (u) {
-      setUser(u);
-    }
+    if (u) setUser(u);
     setIsLoading(false);
   });
 
@@ -36,7 +38,6 @@ export const AuthenticationContextProvider = ({ children }) => {
     lastName,
     city,
     birthdayDate,
-    description,
     email,
     password,
     repeatedPassword
@@ -51,6 +52,15 @@ export const AuthenticationContextProvider = ({ children }) => {
 
     try {
       const u = await registerRequest(email, password);
+      await firebase.firestore().collection('users').doc(u.user.uid).set({
+        userUid: u.user.uid,
+        firstName,
+        lastName,
+        city,
+        birthdayDate,
+        email,
+        isAdmin: false,
+      });
       setUser(u);
     } catch (e) {
       setError(e.toString());
@@ -74,6 +84,7 @@ export const AuthenticationContextProvider = ({ children }) => {
         onLogin,
         onRegister,
         onLogout,
+        clearError,
       }}
     >
       {children}
