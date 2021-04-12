@@ -21,6 +21,8 @@ const getErrorMessage = function (code) {
   switch (code) {
     case 'auth/wrong-password':
       return 'Le mot de passe est incorrect';
+    case 'auth/too-many-requests':
+      return 'Compte bloqué temporairement ...';
     default:
       return "Une erreur s'est produite ...";
   }

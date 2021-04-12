@@ -33,6 +33,7 @@ const LoginPage = () => {
           })
           .catch(error => {
             notyf.error(`${getErrorMessage(error.code)} 💥`);
+            console.log(error);
           });
       } else {
         notyf.error("Vous n'êtes pas administrateur de Flytta 💥");
