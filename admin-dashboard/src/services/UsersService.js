@@ -23,3 +23,21 @@ export const deleteUser = async function (user) {
       notyf.error(`${getErrorMessage(error.code)}`);
     });
 };
+
+export const updateUser = async function (user) {
+  const notyf = new Notyf();
+
+  // Il est arrivé que l'ID possède un espace au début de la chaîne ... Par sécurité on utilise la méthode trim()
+  user.userUid = user.userUid.trim();
+
+  return await db
+    .collection('users')
+    .doc(user.userUid)
+    .update(user)
+    .then(
+      notyf.success(
+        `L'utilisateur ${user.firstName} a bien été mis à jour ! ✅`
+      )
+    )
+    .catch(error => notyf.error(`${getErrorMessage(error.code)}💥`));
+};

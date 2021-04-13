@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { fetchUsers, deleteUser } from '../services/UsersService';
+import { fetchUsers, deleteUser, updateUser } from '../services/UsersService';
 import { UsersList } from '../components/Users/UsersList';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { css } from '@emotion/core';
 
 // PAGES / COMPONENTS / STYLES
 import Header from '../components/Header/Header';
@@ -10,15 +12,24 @@ import FilterField from '../components/FilterField/FilterField';
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  const spinnerStyle = css`
+    display: block;
+    margin: auto;
+    margin-top: 50px;
+  `;
 
   const getUsers = async () => {
     try {
       const data = await fetchUsers();
 
       setUsers([]);
+      setIsLoading(true);
       data.forEach(user => {
         setUsers(users => [...users, user.data()]);
       });
+      setIsLoading(false);
     } catch (error) {
       // TODO NOPTYF
       console.error(error);
@@ -28,6 +39,12 @@ const UsersPage = () => {
   const handleDelete = async function (id) {
     await deleteUser(id);
     getUsers();
+  };
+
+  const handleUpdate = function (event, newUser) {
+    event.preventDefault();
+    updateUser(newUser);
+    setTimeout(() => getUsers(), 200);
   };
 
   // Fonction qui met à jour la valeur dans la barre de recherche pour filtrer ensuite les données
@@ -43,6 +60,7 @@ const UsersPage = () => {
 
   useEffect(() => {
     getUsers();
+    setIsLoading(false);
   }, []);
 
   return (
@@ -57,7 +75,20 @@ const UsersPage = () => {
         onSearch={getUsers}
         value={search}
       />
-      <UsersList users={filteredUsers} onDelete={handleDelete} />
+      {isLoading ? (
+        <ClipLoader
+          color="#0b1f51"
+          loading={isLoading}
+          css={spinnerStyle}
+          size={35}
+        />
+      ) : (
+        <UsersList
+          users={filteredUsers}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+        />
+      )}
     </>
   );
 };

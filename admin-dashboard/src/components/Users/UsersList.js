@@ -1,6 +1,10 @@
 import React from 'react';
+import useModal from '../../hooks/useModal';
+import Modal from '../Modal/Modal';
 
-export const UsersList = function ({ users, onDelete }) {
+export const UsersList = function ({ users, onDelete, onUpdate }) {
+  const { isShowing, toggle } = useModal();
+
   return (
     <div>
       {users.map(user => {
@@ -25,9 +29,19 @@ export const UsersList = function ({ users, onDelete }) {
               >
                 Supprimer
               </button>
-              <button className="bg-blue-500 rounded p-2 hover:bg-blue-600">
+              <button
+                className="bg-blue-500 rounded p-2 hover:bg-blue-600"
+                onClick={toggle}
+              >
                 Modifier
               </button>
+
+              <Modal
+                isShowing={isShowing}
+                hide={toggle}
+                user={user}
+                onSubmit={onUpdate}
+              />
             </div>
           </div>
         );
