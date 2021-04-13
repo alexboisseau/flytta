@@ -54,9 +54,7 @@ export const EventCard = ({ event = {} }) => {
         <Separator />
       </Spacer>
       <Spacer position="top" size="md">
-        <EventCardInfosDescription>
-          {event.description}
-        </EventCardInfosDescription>
+        <EventCardInfosDescription>Lol</EventCardInfosDescription>
       </Spacer>
       <Spacer position="top" size="md">
         <Separator />

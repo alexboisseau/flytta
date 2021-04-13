@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { Picker } from '@react-native-picker/picker';
 
 import { SafeArea } from '../../../components/utility/safe-area';
 import { Input, Label } from '../../../components/ui/input';
@@ -8,20 +9,42 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { ButtonOrange } from '../../../components/ui/button';
 import { Text } from '../../../components/ui/text';
 import { AuthenticationContext } from '../../../services/authentication/authentication.context';
-import { addEventRequest } from '../../../services/events/events.service';
 
-export const EventsCreate = () => {
+import { addEventRequest } from '../../../services/events/events.service';
+import { getCategoriesRequest } from '../../../services/categories/categories.service';
+import { ActivityIndicator } from 'react-native';
+
+export const EventsCreate = ({ navigation }) => {
   const [eventName, setEventName] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [maxPeople, setMaxPeople] = useState(null);
   const [startDate, setStartDate] = useState('');
   const [duration, setDuration] = useState(null);
   const [level, setLevel] = useState('');
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(false);
   const { user } = useContext(AuthenticationContext);
 
+  const getCategories = async () => {
+    setCategories([]);
+    setIsCategoriesLoading(true);
+    try {
+      const ctgs = await getCategoriesRequest();
+      ctgs.forEach((c) => {
+        setCategories((previousCategories) => [
+          ...previousCategories,
+          { uid: c.id, ...c.data() },
+        ]);
+      });
+      setIsCategoriesLoading(false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const onEventAdd = async () => {
-    console.log('yess');
     try {
       await addEventRequest(
         eventName,
@@ -31,13 +54,26 @@ export const EventsCreate = () => {
         startDate,
         duration,
         level,
+        selectedCategory,
         user.uid
       );
-      console.log('event created');
+      setEventName('');
+      setAddress('');
+      setCity('');
+      setMaxPeople(null);
+      setStartDate('');
+      setDuration(null);
+      setLevel('');
+
+      navigation.navigate('Events');
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
+
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   return (
     <SafeArea>
@@ -50,7 +86,7 @@ export const EventsCreate = () => {
               value={eventName}
               keyboardType="default"
               onChangeText={(value) => setEventName(value)}
-              placeholder="Email"
+              placeholder="Nom de l'événement"
             />
           </Spacer>
           <Spacer position="bottom" size="md">
@@ -73,6 +109,21 @@ export const EventsCreate = () => {
               onChangeText={(value) => setCity(value)}
               placeholder="Ville"
             />
+          </Spacer>
+          <Spacer position="bottom" size="md">
+            <Label>Catégorie</Label>
+            {isCategoriesLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <Picker
+                selectedValue={selectedCategory}
+                onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              >
+                {categories.map((c) => (
+                  <Picker.Item key={c.uid} label={c.name} value={c.uid} />
+                ))}
+              </Picker>
+            )}
           </Spacer>
           <Spacer position="bottom" size="md">
             <Label>Nombre de personnes</Label>
@@ -101,7 +152,7 @@ export const EventsCreate = () => {
               value={duration}
               keyboardType="numeric"
               onChangeText={(value) => setDuration(value)}
-              placeholder="Date de début"
+              placeholder="Durée"
             />
           </Spacer>
           <Spacer position="bottom" size="md">
