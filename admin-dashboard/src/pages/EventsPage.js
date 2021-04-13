@@ -1,13 +1,14 @@
 import React from 'react';
 
 // PAGES / COMPONENTS / STYLES
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
+import MainTitle from '../components/MainTitle';
 
 const EventsPage = () => {
   return (
     <>
       <Header></Header>
-      <h1 className="text-8xl my-12 text-center">Events Page</h1>;
+      <MainTitle title="Évènements"></MainTitle>
     </>
   );
 };

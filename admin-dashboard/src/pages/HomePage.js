@@ -1,13 +1,14 @@
 import React from 'react';
 
 // PAGES AND COMPONENTS
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
+import MainTitle from '../components/MainTitle';
 
 const HomePage = () => {
   return (
     <>
       <Header></Header>
-      <h1 className="text-8xl my-12 text-center">Home Page</h1>;
+      <MainTitle title="Home Page"></MainTitle>
     </>
   );
 };
