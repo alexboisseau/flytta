@@ -30,6 +30,7 @@ const UsersPage = () => {
         setUsers(users => [...users, user.data()]);
       });
       setIsLoading(false);
+      console.log(users);
     } catch (error) {
       // TODO NOPTYF
       console.error(error);

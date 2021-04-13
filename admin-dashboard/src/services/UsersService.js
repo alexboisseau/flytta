@@ -12,7 +12,7 @@ export const fetchUsers = async function () {
 export const deleteUser = async function (user) {
   const notyf = new Notyf();
 
-  return await db
+  return db
     .collection('users')
     .doc(user.userUid.trim())
     .delete()
@@ -30,7 +30,7 @@ export const updateUser = async function (user) {
   // Il est arrivé que l'ID possède un espace au début de la chaîne ... Par sécurité on utilise la méthode trim()
   user.userUid = user.userUid.trim();
 
-  return await db
+  return db
     .collection('users')
     .doc(user.userUid)
     .update(user)
