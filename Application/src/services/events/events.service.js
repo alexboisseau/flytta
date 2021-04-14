@@ -1,4 +1,5 @@
 import * as firebase from 'firebase';
+import { getByRef } from '../utils/functions';
 
 export const addEventRequest = (
   eventName,
@@ -8,55 +9,47 @@ export const addEventRequest = (
   startDate,
   duration,
   level,
-  categoryId,
-  creatorId
+  categoryId
 ) =>
-  firebase
+  firebase.firestore().collection('events').add({
+    name: eventName,
+    address,
+    city,
+    categoryId,
+    maxPeople,
+    startDate,
+    duration,
+    level,
+    creatorId: firebase.auth().currentUser.uid,
+  });
+
+export const getEventsRequest = async () => {
+  const data = await firebase.firestore().collection('events').get();
+  return Promise.all(
+    data.docs.map(async (doc) => {
+      const categoryData = await getByRef(
+        'categories',
+        doc.data().categoryId.trim()
+      );
+      const userData = await getByRef('users', doc.data().creatorId);
+
+      return {
+        ...doc.data(),
+        id: doc.id,
+        creator: userData.data(),
+        category: categoryData.data(),
+      };
+    })
+  );
+};
+
+export const addEventJoinRequest = async (event) => {
+  const { members } = event;
+  members[firebase.auth().currentUser.uid] = 'waiting';
+
+  return firebase
     .firestore()
     .collection('events')
-    .add({
-      name: eventName,
-      address,
-      city,
-      category: firebase.firestore().doc(`categories/${categoryId}`),
-      maxPeople,
-      startDate,
-      duration,
-      level,
-      creator: firebase.firestore().doc(`users/${creatorId}`),
-    });
-
-// export const getEventsRequest = async () => {
-//   const output = [];
-//   const data = await firebase.firestore().collection('events').get();
-
-//   data.forEach(async (doc) => {
-//     const {
-//       name,
-//       address,
-//       city,
-//       duration,
-//       level,
-//       startDate,
-//       maxPeople,
-//       categoryId,
-//     } = doc.data();
-
-//     const { name: categoryName, color } = (
-//       await firebase.firestore().collection('categories').doc(categoryId).get()
-//     ).data();
-
-//     output.push({
-//       name,
-//       address,
-//       city,
-//       duration,
-//       level,
-//       startDate,
-//       maxPeople,
-//       category: { name: categoryName, color },
-//     });
-//   });
-
-//   return output;
-// };
+    .doc(event.id)
+    .update({ members });
+};

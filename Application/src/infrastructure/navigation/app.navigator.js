@@ -1,11 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useTheme } from 'styled-components/native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { EventsNavigator } from './events.navigator';
+import { HomeNavigator } from './home.navigator';
 import { ProfileScreen } from '../../screens/app/account/profile.screen';
-import { HomeScreen } from '../../screens/app/home/home.screen';
 
 const TAB_ICON = {
   Home: 'ios-home',
@@ -34,8 +33,6 @@ const createScreenOptions = ({ route }) => {
 };
 
 export const AppNavigator = () => {
-  const { colors } = useTheme();
-
   return (
     <AppTab.Navigator
       screenOptions={createScreenOptions}
@@ -44,16 +41,8 @@ export const AppNavigator = () => {
         inactiveTintColor: 'gray',
       }}
     >
-      <AppTab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          title: 'Accueil',
-          headerStyle: { backgroundColor: colors.primary },
-          headerTintColor: 'white',
-        }}
-      />
-      <AppTab.Screen name="Evénements" component={EventsNavigator} />
+      <AppTab.Screen name="Home" component={HomeNavigator} />
+      <AppTab.Screen name="Events" component={EventsNavigator} />
       <AppTab.Screen name="Messages" component={() => null} />
       <AppTab.Screen name="Profile" component={ProfileScreen} />
     </AppTab.Navigator>

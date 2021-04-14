@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Picker } from '@react-native-picker/picker';
 
 import { SafeArea } from '../../../components/utility/safe-area';
@@ -8,7 +8,6 @@ import { EventsCreateForm } from './components/events-create.styles';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ButtonOrange } from '../../../components/ui/button';
 import { Text } from '../../../components/ui/text';
-import { AuthenticationContext } from '../../../services/authentication/authentication.context';
 
 import { addEventRequest } from '../../../services/events/events.service';
 import { getCategoriesRequest } from '../../../services/categories/categories.service';
@@ -25,19 +24,14 @@ export const EventsCreate = ({ navigation }) => {
   const [duration, setDuration] = useState(null);
   const [level, setLevel] = useState('');
   const [isCategoriesLoading, setIsCategoriesLoading] = useState(false);
-  const { user } = useContext(AuthenticationContext);
 
   const getCategories = async () => {
     setCategories([]);
     setIsCategoriesLoading(true);
     try {
       const ctgs = await getCategoriesRequest();
-      ctgs.forEach((c) => {
-        setCategories((previousCategories) => [
-          ...previousCategories,
-          { uid: c.id, ...c.data() },
-        ]);
-      });
+      setCategories(ctgs);
+      setSelectedCategory(ctgs[0].id);
       setIsCategoriesLoading(false);
     } catch (e) {
       console.error(e);
@@ -54,8 +48,7 @@ export const EventsCreate = ({ navigation }) => {
         startDate,
         duration,
         level,
-        selectedCategory,
-        user.uid
+        selectedCategory
       );
       setEventName('');
       setAddress('');
@@ -65,7 +58,7 @@ export const EventsCreate = ({ navigation }) => {
       setDuration(null);
       setLevel('');
 
-      navigation.navigate('Events');
+      navigation.navigate('EventsUsers');
     } catch (e) {
       console.error(e);
     }
@@ -120,7 +113,7 @@ export const EventsCreate = ({ navigation }) => {
                 onValueChange={(itemValue) => setSelectedCategory(itemValue)}
               >
                 {categories.map((c) => (
-                  <Picker.Item key={c.uid} label={c.name} value={c.uid} />
+                  <Picker.Item key={c.id} label={c.name} value={c.id} />
                 ))}
               </Picker>
             )}

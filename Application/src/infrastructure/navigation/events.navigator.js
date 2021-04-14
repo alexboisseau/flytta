@@ -7,8 +7,9 @@ import {
 } from '@react-navigation/stack';
 
 import { EventsScreen } from '../../screens/app/events/events.screen';
-import { Spacer } from '../../components/ui/spacer';
 import { EventsCreate } from '../../screens/app/events/events-create.screen';
+import { EventsShow } from '../../screens/app/events/events-show.screen';
+import { Spacer } from '../../components/ui/spacer';
 
 const EventsStack = createStackNavigator();
 
@@ -18,7 +19,7 @@ export const EventsNavigator = ({ navigation }) => {
   return (
     <EventsStack.Navigator>
       <EventsStack.Screen
-        name="Events"
+        name="EventsUsers"
         component={EventsScreen}
         options={{
           title: 'Evénements',
@@ -27,7 +28,7 @@ export const EventsNavigator = ({ navigation }) => {
           headerRight: () => (
             <Spacer position="right" size="md">
               <Button
-                onPress={() => navigation.navigate('events.create')}
+                onPress={() => navigation.navigate('EventsCreate')}
                 title="+ Nouveau"
                 color="#fff"
               />
@@ -36,7 +37,7 @@ export const EventsNavigator = ({ navigation }) => {
         }}
       />
       <EventsStack.Screen
-        name="events.create"
+        name="EventsCreate"
         options={{
           headerStyle: { backgroundColor: colors.primary },
           headerTintColor: 'white',

@@ -1,6 +1,5 @@
 import styled from 'styled-components/native';
 
-import { Text } from '../../../../components/ui/text';
 import { Ionicons } from '@expo/vector-icons';
 
 export const EventCardContainer = styled.View`
@@ -14,7 +13,6 @@ export const EventCardHeader = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px 0 10px;
 `;
 
 export const Separator = styled.View`
@@ -39,6 +37,9 @@ export const EventCardInfos = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+`;
+
+export const PaddingX = styled.View`
   padding: 0 10px 0 10px;
 `;
 
@@ -55,13 +56,8 @@ export const EventCardInfosItemText = styled(Ionicons)`
   color: gray;
 `;
 
-export const EventCardInfosDescription = styled(Text)`
-  padding: 0 10px 0 10px;
-`;
-
 export const EventCardFooter = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px 0 10px;
 `;
