@@ -46,7 +46,7 @@ const EventsPage = () => {
   const handleUpdate = function (e, newEvent) {
     e.preventDefault();
     updateEvent(newEvent);
-    setTimeout(() => getEvents(), 200);
+    setTimeout(() => getEvents(), 500);
   };
 
   // Fonction qui met à jour la valeur dans la barre de recherche pour filtrer par la suite les données

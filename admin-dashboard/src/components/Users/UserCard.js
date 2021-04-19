@@ -2,6 +2,10 @@ import React from 'react';
 import useModal from '../../hooks/useModal';
 import UserModal from './Modal/UserModal';
 
+// STYLES / COMPONENTS / PAGES
+import TrashIcon from '../../assets/svgIcons/TrashIcon';
+import EditIcon from '../../assets/svgIcons/EditIcon';
+
 const UserCard = ({ user, onDelete, onUpdate }) => {
   const { isShowing, toggle } = useModal();
 
@@ -12,22 +16,25 @@ const UserCard = ({ user, onDelete, onUpdate }) => {
           {user.firstName} {user.lastName}
         </p>
         <p className="text-sm antialiased">{user.email}</p>
+        <p className="text-sm antialiased text-gray-500">~ {user.city} ~</p>
         <p className="text-xs antialiased text-gray-500 mt-4">
           #{user.userId.trim()}
         </p>
       </div>
       <div className="flex space-x-2 text-white">
         <button
-          className="bg-red-500 rounded p-2 hover:bg-red-600"
+          className="bg-red-500 rounded p-2 hover:bg-red-600 flex items-center justify-center space-x-2"
           onClick={() => onDelete(user)}
         >
-          Supprimer
+          <TrashIcon></TrashIcon>
+          <span>Supprimer</span>
         </button>
         <button
-          className="bg-blue-500 rounded p-2 hover:bg-blue-600"
+          className="bg-blue-500 rounded p-2 hover:bg-blue-600 flex items-center justify-center space-x-2"
           onClick={toggle}
         >
-          Modifier
+          <EditIcon></EditIcon>
+          <span>Modifier</span>
         </button>
 
         <UserModal

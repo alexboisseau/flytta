@@ -5,8 +5,6 @@ export const UsersList = function ({ users, onDelete, onUpdate }) {
   return (
     <div>
       {users.map(user => {
-        user.isShowing = false;
-
         return (
           <UserCard
             user={user}

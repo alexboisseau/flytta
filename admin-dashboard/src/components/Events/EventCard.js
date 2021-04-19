@@ -2,6 +2,10 @@ import React from 'react';
 import useModal from '../../hooks/useModal';
 import EventModal from './Modal/EventModal';
 
+// STYLES / COMPONENTS / PAGES
+import TrashIcon from '../../assets/svgIcons/TrashIcon';
+import EditIcon from '../../assets/svgIcons/EditIcon';
+
 const EventCard = ({ event, onDelete, onUpdate }) => {
   const { isShowing, toggle } = useModal();
 
@@ -19,18 +23,20 @@ const EventCard = ({ event, onDelete, onUpdate }) => {
           #{event.eventId.trim()}
         </p>
       </div>
-      <div className="flex flex-col space-y-1 text-white">
+      <div className="flex space-x-2 text-white">
         <button
-          className="bg-red-500 rounded p-2 hover:bg-red-600"
+          className="bg-red-500 rounded p-2 hover:bg-red-600 flex items-center justify-center space-x-2"
           onClick={() => onDelete(event)}
         >
-          Supprimer
+          <TrashIcon></TrashIcon>
+          <span>Supprimer</span>
         </button>
         <button
-          className="bg-blue-500 rounded p-2 hover:bg-blue-600"
+          className="bg-blue-500 rounded p-2 hover:bg-blue-600 flex items-center justify-center space-x-2"
           onClick={toggle}
         >
-          Modifier
+          <EditIcon></EditIcon>
+          <span>Modifier</span>
         </button>
       </div>
       <EventModal

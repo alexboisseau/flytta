@@ -7,7 +7,10 @@ const UserModal = ({ isShowing, hide, user, onSubmit }) => {
   const [currentUser, setCurrentUser] = useState(user);
 
   const handleChange = function (event) {
-    const { name, value } = event.currentTarget;
+    let { name, value } = event.currentTarget;
+    if (name === 'isAdmin') {
+      value = event.currentTarget.checked;
+    }
     let provisionalUser = { ...currentUser }; // shallow copy
     provisionalUser[name] = value;
     setCurrentUser(provisionalUser);
@@ -60,18 +63,27 @@ const UserModal = ({ isShowing, hide, user, onSubmit }) => {
                         onChange={event => handleChange(event)}
                       />
                     </div>
-                    {currentUser.email ? (
-                      <div>
-                        <label className="font-semibold block">Email</label>
-                        <input
-                          className="rounded border border-gray-200 p-2 w-full my-1"
-                          type="text"
-                          name="email"
-                          value={currentUser.email}
-                          onChange={event => handleChange(event)}
-                        />
-                      </div>
-                    ) : null}
+                    <div>
+                      <label className="font-semibold block">Ville</label>
+                      <input
+                        className="rounded border border-gray-200 p-2 w-full my-1"
+                        type="text"
+                        name="city"
+                        value={currentUser.city}
+                        onChange={event => handleChange(event)}
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="checkbox"
+                        name="isAdmin"
+                        value={currentUser.isAdmin}
+                        className="mr-2"
+                        onChange={event => handleChange(event)}
+                        defaultChecked={currentUser.isAdmin}
+                      />
+                      <label>Administrateur</label>
+                    </div>
                     <button className="p-3 text-white bg-blue-500 rounded hover:bg-blue-600">
                       Confirmer
                     </button>
