@@ -7,6 +7,7 @@ import UserContext from './providers/UserProvider';
 // PAGES AND COMPONENTS
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
+import CategoriesPage from './pages/CategoriesPage';
 import UsersPage from './pages/UsersPage';
 import EventsPage from './pages/EventsPage';
 
@@ -38,6 +39,9 @@ function App() {
         </Route>
         <Route path="/events">
           <EventsPage />
+        </Route>
+        <Route path="/categories">
+          <CategoriesPage />
         </Route>
         <Route path="/">
           <UsersPage />

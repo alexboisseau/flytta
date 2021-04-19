@@ -31,6 +31,9 @@ const Header = () => {
         <Link to="/events" className="hover:underline">
           Évènements
         </Link>
+        <Link to="/categories" className="hover:underline">
+          Catégories
+        </Link>
         <Link
           to="/"
           className="hover:underline"
