@@ -40,7 +40,7 @@ function App() {
           <EventsPage />
         </Route>
         <Route path="/">
-          <HomePage />
+          <UsersPage />
         </Route>
       </Switch>
     );
