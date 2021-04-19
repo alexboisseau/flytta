@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SvgXml } from 'react-native-svg';
 
 import { SafeArea } from '../../../components/utility/safe-area';
@@ -16,28 +16,88 @@ import {
   EventCardFooter,
   PaddingX,
 } from './components/event-card.styles.js';
+import {
+  ListItemButtonsContainer,
+  ListItemContainer,
+} from './components/events-show.styles';
 import { BgWhite } from '../../../components/ui/bg';
-import { ButtonGreen } from '../../../components/ui/button';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ButtonGreen, ButtonRed } from '../../../components/ui/button';
+import {
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import { AuthenticationContext } from '../../../services/authentication/authentication.context';
 
-import { addEventJoinRequest } from '../../../services/events/events.service';
+import {
+  changeEventStatusRequest,
+  handleEventJoinRequest,
+} from '../../../services/events/events.service';
 
 import waiting from '../../../../assets/waiting.js';
 import { ImageBoxCenter } from '../../../components/ui/image';
+import { getUsersByArray } from '../../../services/authentication/authentication.service';
+import { Ionicons } from '@expo/vector-icons';
 
 export const EventsShow = ({ navigation, route }) => {
   const { event } = route.params;
   const { user } = useContext(AuthenticationContext);
+  const [membersData, setMembersData] = useState([]);
+  const initialEventMembers =
+    user.uid === event.creatorId
+      ? Object.fromEntries(
+          Object.entries(event.members).filter(
+            ([key, status]) => status !== 'refused'
+          )
+        )
+      : Object.fromEntries(
+          Object.entries(event.members).filter(
+            ([key, status]) => status === 'accepted'
+          )
+        );
+  const [eventMembers, setEventMembers] = useState(initialEventMembers);
 
   const onEventJoin = async () => {
     try {
-      await addEventJoinRequest(event);
+      await handleEventJoinRequest(event, true);
       navigation.navigate('HomeIndex');
     } catch (e) {
       console.error(e);
     }
   };
+
+  const onEventRemoveJoin = async () => {
+    try {
+      await handleEventJoinRequest(event, false);
+      navigation.navigate('HomeIndex');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const onChangeStatusEvent = async (u, isAccepted) => {
+    try {
+      await changeEventStatusRequest(event, u, isAccepted);
+      navigation.navigate('HomeIndex');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const getMembersData = async (mbs) => {
+    try {
+      const data = await getUsersByArray(mbs);
+      setMembersData(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    if (Object.keys(eventMembers).length > 0) {
+      getMembersData(eventMembers);
+    }
+  }, [eventMembers]);
 
   return (
     <SafeArea>
@@ -127,25 +187,106 @@ export const EventsShow = ({ navigation, route }) => {
           </BgWhite>
         </Spacer>
 
-        <Spacer position="top" size="lg">
-          <PaddingX>
-            {event.members.hasOwnProperty(user.uid) ? (
-              <>
-                <ImageBoxCenter>
-                  <SvgXml xml={waiting} width={200} height={200} />
-                </ImageBoxCenter>
-                <Text center bold>
-                  En attente d'approbation...
-                </Text>
-              </>
-            ) : (
+        <Spacer position="top" size="md">
+          {event.members.hasOwnProperty(user.uid.trim()) &&
+          event.members[user.uid] === 'waiting' ? (
+            <>
+              <ImageBoxCenter>
+                <SvgXml xml={waiting} width={200} height={200} />
+              </ImageBoxCenter>
+              <Text center bold>
+                En attente d'approbation...
+              </Text>
+              <Spacer position="top" size="lg">
+                <PaddingX>
+                  <ButtonRed onPress={onEventRemoveJoin}>
+                    <Text color="white" bold center>
+                      Annuler ma demande
+                    </Text>
+                  </ButtonRed>
+                </PaddingX>
+              </Spacer>
+            </>
+          ) : (event.members.hasOwnProperty(user.uid) &&
+              event.members[user.uid] === 'accepted') ||
+            event.creatorId === user.uid ? (
+            <>
+              <BgWhite>
+                <PaddingX>
+                  <Text sm bold>
+                    MEMBRES
+                  </Text>
+                  <FlatList
+                    data={membersData}
+                    renderItem={({ item }) => (
+                      <Spacer position="top" size="lg">
+                        <ListItemContainer>
+                          <Text>{item.firstName}</Text>
+                          {event.creatorId === user.uid &&
+                            eventMembers[item.userId] !== 'accepted' && (
+                              <ListItemButtonsContainer>
+                                <TouchableOpacity
+                                  onPress={() =>
+                                    onChangeStatusEvent(item, true)
+                                  }
+                                >
+                                  <Ionicons
+                                    name="ios-checkmark-circle"
+                                    size={25}
+                                    color="green"
+                                  />
+                                </TouchableOpacity>
+                                <Spacer position="left" size="lg">
+                                  <TouchableOpacity
+                                    onPress={() =>
+                                      onChangeStatusEvent(item, false)
+                                    }
+                                  >
+                                    <Ionicons
+                                      name="ios-close-circle"
+                                      size={25}
+                                      color="red"
+                                    />
+                                  </TouchableOpacity>
+                                </Spacer>
+                              </ListItemButtonsContainer>
+                            )}
+                          {eventMembers[item.userId] === 'accepted' && (
+                            <Text color="green" bold>
+                              Accepté
+                            </Text>
+                          )}
+                        </ListItemContainer>
+                      </Spacer>
+                    )}
+                    keyExtractor={(memberUser) => memberUser.userId}
+                  />
+                </PaddingX>
+              </BgWhite>
+              {event.creatorId !== user.uid && (
+                <Spacer position="top" size="md">
+                  <PaddingX>
+                    <ButtonRed onPress={onEventRemoveJoin}>
+                      <Text color="white" bold center>
+                        Quitter l'événement
+                      </Text>
+                    </ButtonRed>
+                  </PaddingX>
+                </Spacer>
+              )}
+            </>
+          ) : event.members.hasOwnProperty(user.uid) &&
+            event.members[user.uid] === 'refused' ? (
+            <Text>Refusé désolé...</Text>
+          ) : (
+            <PaddingX>
               <ButtonGreen onPress={onEventJoin}>
                 <Text color="white" bold center>
                   Demander à rejoindre l'événement
                 </Text>
               </ButtonGreen>
-            )}
-          </PaddingX>
+            </PaddingX>
+          )}
         </Spacer>
       </ScrollView>
     </SafeArea>

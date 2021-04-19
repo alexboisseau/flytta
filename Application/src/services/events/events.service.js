@@ -20,6 +20,7 @@ export const addEventRequest = (
     startDate,
     duration,
     level,
+    members: {},
     creatorId: firebase.auth().currentUser.uid,
   });
 
@@ -43,9 +44,31 @@ export const getEventsRequest = async () => {
   );
 };
 
-export const addEventJoinRequest = async (event) => {
+export const handleEventJoinRequest = async (event, isAdd) => {
+  let { members } = event;
+
+  if (isAdd) {
+    members[firebase.auth().currentUser.uid.trim()] = 'waiting';
+  } else {
+    members = Object.keys(members)
+      .filter((key) => key !== firebase.auth().currentUser.uid)
+      .reduce((obj, key) => {
+        obj[key] = members[key];
+        return obj;
+      }, {});
+  }
+
+  return firebase
+    .firestore()
+    .collection('events')
+    .doc(event.id)
+    .update({ members });
+};
+
+export const changeEventStatusRequest = async (event, user, isAccepted) => {
   const { members } = event;
-  members[firebase.auth().currentUser.uid] = 'waiting';
+
+  members[user.userId.trim()] = isAccepted ? 'accepted' : 'refused';
 
   return firebase
     .firestore()
