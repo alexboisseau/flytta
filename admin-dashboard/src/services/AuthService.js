@@ -1,6 +1,6 @@
 import { db } from '../firebase';
 
-// Permet de vérifier qu'un utilisateur est admin ou non depuis son email
+// Récupère l'utilisateur par son mail et vérifie si son rôle admin est à true ou à false
 const checkIsAdmin = async function (email) {
   return db
     .collection('users')
@@ -17,15 +17,4 @@ const checkIsAdmin = async function (email) {
     });
 };
 
-const getErrorMessage = function (code) {
-  switch (code) {
-    case 'auth/wrong-password':
-      return 'Le mot de passe est incorrect';
-    case 'auth/too-many-requests':
-      return 'Compte bloqué temporairement ...';
-    default:
-      return "Une erreur s'est produite ...";
-  }
-};
-
-export { checkIsAdmin, getErrorMessage };
+export { checkIsAdmin };

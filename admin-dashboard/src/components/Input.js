@@ -1,15 +1,31 @@
 import React from 'react';
 
-const Input = ({ name, type, placeholder, value, onChange }) => {
+const Input = ({
+  name,
+  type,
+  placeholder = '',
+  value,
+  onChange,
+  className,
+  label,
+  classNameLabel,
+}) => {
   return (
-    <input
-      name={name}
-      type={type}
-      placeholder={placeholder}
-      className="block mb-1 p-2 rounded w-80 text-black focus:outline-none"
-      value={value}
-      onChange={event => onChange(event)}
-    />
+    <>
+      {label ? (
+        <label className={classNameLabel} name={name}>
+          {label}
+        </label>
+      ) : null}
+      <input
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        className={className}
+        value={value}
+        onChange={event => onChange(event)}
+      />
+    </>
   );
 };
 

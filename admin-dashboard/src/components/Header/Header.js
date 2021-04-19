@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { auth } from '../../firebase';
-import { getErrorMessage } from '../../services/AuthService';
+import { getErrorMessage } from '../../services/FunctionsServices';
 import { Notyf } from 'notyf';
 
 // PAGES / COMPONENTS / STYLES

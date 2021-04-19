@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase';
-import { checkIsAdmin, getErrorMessage } from '../services/AuthService';
+import { checkIsAdmin } from '../services/AuthService';
+import { getErrorMessage } from '../services/FunctionsServices';
 import { Notyf } from 'notyf';
 
 // PAGES AND COMPONENTS
@@ -11,19 +12,21 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onChangeHandler = function (event) {
-    const { name, value } = event.currentTarget;
+  // Gestion du changement de la valeur des inputs
+  const onChangeHandler = function ({ currentTarget }) {
+    const { name, value } = currentTarget;
 
     if (name === 'email') setEmail(value);
     if (name === 'password') setPassword(value);
   };
 
+  // Gestion de la soumission du formulaire
   const onSubmitHandler = async function (event) {
     event.preventDefault();
+    const notyf = new Notyf();
 
     try {
       const isAdmin = await checkIsAdmin(email);
-      const notyf = new Notyf();
 
       if (isAdmin) {
         auth
@@ -39,7 +42,7 @@ const LoginPage = () => {
         notyf.error("Vous n'êtes pas administrateur de Flytta 💥");
       }
     } catch (error) {
-      console.log(error);
+      notyf.error("Merci de vérifier l'email renseignée 💥");
     }
   };
 
@@ -62,14 +65,16 @@ const LoginPage = () => {
             placeholder="Email"
             value={email}
             onChange={onChangeHandler}
-          ></Input>
+            className="block mb-1 p-2 rounded w-80 text-black focus:outline-none"
+          />
           <Input
             name="password"
             type="password"
             placeholder="Mot de passe"
             value={password}
             onChange={onChangeHandler}
-          ></Input>
+            className="block mb-1 p-2 rounded w-80 text-black focus:outline-none"
+          />
 
           <button
             type="submit"

@@ -1,7 +1,8 @@
 import { db } from '../firebase';
 import { Notyf } from 'notyf';
-import { getErrorMessage } from './AuthService';
+import { getErrorMessage } from './FunctionsServices';
 
+// Récupère tous les utilisateurs dans Firestore
 export const fetchUsers = async function () {
   return db
     .collection('users')
@@ -9,6 +10,7 @@ export const fetchUsers = async function () {
     .then(res => res);
 };
 
+// Supprime un utilisateur dans Firestore et renvoie un message d'erreur où de succès
 export const deleteUser = async function (user) {
   const notyf = new Notyf();
 
@@ -20,19 +22,17 @@ export const deleteUser = async function (user) {
       notyf.success(`L'utilisateur ${user.firstName} a bien été supprimé ! ✅`)
     )
     .catch(error => {
-      notyf.error(`${getErrorMessage(error.code)}`);
+      notyf.error(`${getErrorMessage(error.code)}💥`);
     });
 };
 
+// Met à jour un utilisateur dans Firestore et renvoie un message d'erreur ou de succès
 export const updateUser = async function (user) {
   const notyf = new Notyf();
 
-  // Il est arrivé que l'ID possède un espace au début de la chaîne ... Par sécurité on utilise la méthode trim()
-  user.userUid = user.userUid.trim();
-
   return db
     .collection('users')
-    .doc(user.userUid)
+    .doc(user.userId.trim())
     .update(user)
     .then(
       notyf.success(
