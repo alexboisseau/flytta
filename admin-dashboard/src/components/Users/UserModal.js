@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import '../../Modal.css';
+import '../Modal.css';
 
 const UserModal = ({ isShowing, hide, user, onSubmit }) => {
   const [currentUser, setCurrentUser] = useState(user);
