@@ -18,6 +18,7 @@ import {
 } from './event-card.styles';
 
 export const EventCard = ({ navigation, event = {} }) => {
+  console.log(event);
   return (
     <EventCardContainer>
       <PaddingX>
@@ -74,7 +75,9 @@ export const EventCard = ({ navigation, event = {} }) => {
                 size={32}
                 color="gray"
               />
-              <EventCardInfosItemText>Thomas Ln</EventCardInfosItemText>
+              <EventCardInfosItemText>
+                {event.creator.firstName} {event.creator.lastName}
+              </EventCardInfosItemText>
             </EventCardInfosItem>
           </EventCardFooter>
         </PaddingX>
