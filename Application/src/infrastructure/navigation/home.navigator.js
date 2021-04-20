@@ -45,7 +45,7 @@ export const HomeNavigator = ({ navigation }) => {
         name="EventsUpdate"
         component={EventsUpdate}
         options={{
-          title: 'Accueil',
+          title: '',
           headerStyle: { backgroundColor: colors.primary },
           headerTintColor: 'white',
         }}

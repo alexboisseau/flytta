@@ -51,6 +51,21 @@ export const EventsNavigator = ({ navigation }) => {
         }}
         component={EventsCreate}
       />
+      <EventsStack.Screen
+        name="EventsShow"
+        component={EventsShow}
+        options={({ route }) => ({
+          title: route.params.event.name,
+          headerStyle: { backgroundColor: colors.primary },
+          headerTintColor: 'white',
+          headerLeft: (props) => (
+            <Spacer position="left" size="md">
+              <HeaderBackButton {...props} />
+            </Spacer>
+          ),
+          headerBackTitleVisible: false,
+        })}
+      />
     </EventsStack.Navigator>
   );
 };

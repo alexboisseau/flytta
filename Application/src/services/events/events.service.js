@@ -1,4 +1,5 @@
 import * as firebase from 'firebase';
+import { get } from 'react-native/Libraries/Utilities/PixelRatio';
 import { getByRef } from '../utils/functions';
 
 export const addEventRequest = (
@@ -79,4 +80,54 @@ export const changeEventStatusRequest = async (event, user, isAccepted) => {
 
 export const updateEventRequest = async (event) => {
   return firebase.firestore().collection('events').doc(event.id).update(event);
+};
+
+export const getCreatedEventsRequest = async (userId) => {
+  const data = await firebase
+    .firestore()
+    .collection('events')
+    .where('creatorId', '==', userId)
+    .get();
+
+  return Promise.all(
+    data.docs.map(async (doc) => {
+      const categoryData = await getByRef(
+        'categories',
+        doc.data().categoryId.trim()
+      );
+      const userData = await getByRef('users', doc.data().creatorId);
+
+      return {
+        ...doc.data(),
+        id: doc.id,
+        creator: userData.data(),
+        category: categoryData.data(),
+      };
+    })
+  );
+};
+
+export const getRegisteredEventsRequest = async (userId) => {
+  const data = await firebase.firestore().collection('events').get();
+
+  return Promise.all(
+    data.docs.map(async (doc) => {
+      if (doc.data().members[userId]) {
+        const categoryData = await getByRef(
+          'categories',
+          doc.data().categoryId.trim()
+        );
+        const userData = await getByRef('users', doc.data().creatorId);
+
+        return {
+          ...doc.data(),
+          id: doc.id,
+          creator: userData.data(),
+          category: categoryData.data(),
+        };
+      }
+
+      return null;
+    })
+  );
 };
