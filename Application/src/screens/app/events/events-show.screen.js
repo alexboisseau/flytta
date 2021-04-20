@@ -165,14 +165,22 @@ export const EventsShow = ({ navigation, route }) => {
                 <Text md bold>
                   {event.maxPeople} places restantes
                 </Text>
-                <EventCardInfosItem>
-                  <EventCardInfosItemIcon
-                    name="ios-person-circle"
-                    size={32}
-                    color="gray"
-                  />
-                  <EventCardInfosItemText>Thomas Ln</EventCardInfosItemText>
-                </EventCardInfosItem>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('HomeProfile', {
+                      userId: event.creatorId,
+                    })
+                  }
+                >
+                  <EventCardInfosItem>
+                    <EventCardInfosItemIcon
+                      name="ios-person-circle"
+                      size={32}
+                      color="gray"
+                    />
+                    <EventCardInfosItemText>Thomas Ln</EventCardInfosItemText>
+                  </EventCardInfosItem>
+                </TouchableOpacity>
               </EventCardFooter>
             </PaddingX>
           </Spacer>

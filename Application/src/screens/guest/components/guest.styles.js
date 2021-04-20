@@ -51,6 +51,12 @@ export const Separator = styled.View`
   background-color: ${(props) => props.theme.colors.white};
 `;
 
+export const SeparatorBlack = styled.View`
+  width: 300px;
+  height: 1px;
+  background-color: #000;
+`;
+
 export const ErrorContainer = styled.View`
   max-width: 300px;
 `;

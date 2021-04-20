@@ -12,13 +12,11 @@ import {
   EventCardInfosItemIcon,
   EventCardInfosItemText,
   Separator,
-  EventCardInfosDescription,
   EventCardFooter,
   PaddingX,
 } from './event-card.styles';
 
-export const EventCard = ({ navigation, event = {} }) => {
-  console.log(event);
+export const EventCard = ({ event = {} }) => {
   return (
     <EventCardContainer>
       <PaddingX>

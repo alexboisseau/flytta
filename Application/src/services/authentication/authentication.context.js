@@ -1,7 +1,12 @@
 import React, { useState, createContext } from 'react';
 import * as firebase from 'firebase';
 
-import { loginRequest, registerRequest } from './authentication.service';
+import {
+  loginRequest,
+  registerRequest,
+  updateUser,
+  updateUserAvatarRequest,
+} from './authentication.service';
 
 export const AuthenticationContext = createContext();
 
@@ -26,6 +31,34 @@ export const AuthenticationContextProvider = ({ children }) => {
     try {
       const u = await loginRequest(email, password);
       setUser(u);
+    } catch (e) {
+      setError(e.toString());
+    }
+
+    setIsLoading(false);
+  };
+
+  const onUpdateProfile = async (
+    newUser,
+    firstName,
+    lastName,
+    email,
+    city,
+    description,
+    image
+  ) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      newUser.firstName = firstName;
+      newUser.lastName = lastName;
+      newUser.email = email;
+      newUser.city = city;
+      newUser.description = description;
+      await updateUser(newUser);
+      await updateUserAvatarRequest(image, newUser.userId);
+      console.log('yesss');
     } catch (e) {
       setError(e.toString());
     }
@@ -85,6 +118,7 @@ export const AuthenticationContextProvider = ({ children }) => {
         onRegister,
         onLogout,
         clearError,
+        onUpdateProfile,
       }}
     >
       {children}

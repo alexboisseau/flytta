@@ -8,7 +8,6 @@ import { Spacer } from '../../components/ui/spacer';
 import {
   GuestBackground,
   AuthContainer,
-  AppTitle,
   AuthInput,
   AuthButton,
   AuthButtonText,
