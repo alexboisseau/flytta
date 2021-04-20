@@ -40,7 +40,7 @@ import { getUsersByArray } from '../../../services/authentication/authentication
 import { Ionicons } from '@expo/vector-icons';
 
 export const EventsShow = ({ navigation, route }) => {
-  const { event } = route.params;
+  const { event, redirectScreen } = route.params;
   const { user } = useContext(AuthenticationContext);
   const [membersData, setMembersData] = useState([]);
   const initialEventMembers =
@@ -60,7 +60,7 @@ export const EventsShow = ({ navigation, route }) => {
   const onEventJoin = async () => {
     try {
       await handleEventJoinRequest(event, true);
-      navigation.navigate('HomeIndex');
+      navigation.navigate(redirectScreen);
     } catch (e) {
       console.error(e);
     }
@@ -69,7 +69,7 @@ export const EventsShow = ({ navigation, route }) => {
   const onEventRemoveJoin = async () => {
     try {
       await handleEventJoinRequest(event, false);
-      navigation.navigate('HomeIndex');
+      navigation.navigate(redirectScreen);
     } catch (e) {
       console.error(e);
     }
@@ -82,7 +82,7 @@ export const EventsShow = ({ navigation, route }) => {
   const onChangeStatusEvent = async (u, isAccepted) => {
     try {
       await changeEventStatusRequest(event, u, isAccepted);
-      navigation.navigate('HomeIndex');
+      navigation.navigate(redirectScreen);
     } catch (e) {
       console.error(e);
     }

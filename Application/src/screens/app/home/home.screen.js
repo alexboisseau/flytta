@@ -41,7 +41,12 @@ export const HomeScreen = ({ navigation }) => {
           data={events}
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={() => navigation.navigate('EventsShow', { event: item })}
+              onPress={() =>
+                navigation.navigate('EventsShow', {
+                  event: item,
+                  redirectScreen: 'HomeIndex',
+                })
+              }
             >
               <Spacer position="bottom" size="md">
                 <EventCard event={item} />
