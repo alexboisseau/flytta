@@ -76,3 +76,7 @@ export const changeEventStatusRequest = async (event, user, isAccepted) => {
     .doc(event.id)
     .update({ members });
 };
+
+export const updateEventRequest = async (event) => {
+  return firebase.firestore().collection('events').doc(event.id).update(event);
+};

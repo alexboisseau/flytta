@@ -8,6 +8,7 @@ import {
 import { Spacer } from '../../components/ui/spacer';
 import { HomeScreen } from '../../screens/app/home/home.screen';
 import { EventsShow } from '../../screens/app/events/events-show.screen';
+import { EventsUpdate } from '../../screens/app/events/events-update.screen';
 
 const HomeStack = createStackNavigator();
 
@@ -39,6 +40,15 @@ export const HomeNavigator = ({ navigation }) => {
           ),
           headerBackTitleVisible: false,
         })}
+      />
+      <HomeStack.Screen
+        name="EventsUpdate"
+        component={EventsUpdate}
+        options={{
+          title: 'Accueil',
+          headerStyle: { backgroundColor: colors.primary },
+          headerTintColor: 'white',
+        }}
       />
     </HomeStack.Navigator>
   );

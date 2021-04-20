@@ -75,6 +75,10 @@ export const EventsShow = ({ navigation, route }) => {
     }
   };
 
+  const onUpdateEvent = (eventToUpdate) => {
+    navigation.navigate('EventsUpdate', { eventToUpdate });
+  };
+
   const onChangeStatusEvent = async (u, isAccepted) => {
     try {
       await changeEventStatusRequest(event, u, isAccepted);
@@ -263,6 +267,17 @@ export const EventsShow = ({ navigation, route }) => {
                   />
                 </PaddingX>
               </BgWhite>
+              <Spacer position="top" size="md">
+                {event.creatorId === user.uid && (
+                  <PaddingX>
+                    <ButtonGreen onPress={() => onUpdateEvent(event)}>
+                      <Text color="white" bold center>
+                        Mettre à jour l'évènement
+                      </Text>
+                    </ButtonGreen>
+                  </PaddingX>
+                )}
+              </Spacer>
               {event.creatorId !== user.uid && (
                 <Spacer position="top" size="md">
                   <PaddingX>
