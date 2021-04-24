@@ -11,12 +11,6 @@ export const ScrollViewContainer = styled.ScrollView.attrs({
   padding: 16px;
 `;
 
-export const Avatar = styled.Image`
-  height: 150px;
-  width: 150px;
-  border-radius: 9999px;
-`;
-
 export const ButtonsWrapper = styled.View`
   flex-direction: row;
 `;

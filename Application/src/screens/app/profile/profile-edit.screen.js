@@ -15,11 +15,13 @@ import {
   SeparatorBlack,
 } from '../../guest/components/guest.styles';
 import { Text } from '../../../components/ui/text';
+import { Avatar } from '../../../components/ui/avatar';
 import {
+  getAvatarUser,
   getUserRequest,
   updateUserAvatarRequest,
 } from '../../../services/authentication/authentication.service';
-import { Avatar, ScrollViewContainer } from './components/profile.styles';
+import { ScrollViewContainer } from './components/profile.styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const ProfileEditScreen = ({ navigation }) => {
@@ -59,9 +61,12 @@ export const ProfileEditScreen = ({ navigation }) => {
     const getUser = async () => {
       try {
         const uData = await getUserRequest(user.uid);
+        const avatarUser = await getAvatarUser(user.uid).catch((e) =>
+          console.log('no avatar')
+        );
         if (uData.exists) {
           const newUser = uData.data();
-          setUserData(newUser);
+          setUserData({ ...newUser, avatar: avatarUser });
           setFirstName(newUser.firstName);
           setLastName(newUser.lastName);
           setDescription(newUser.description);
@@ -80,7 +85,12 @@ export const ProfileEditScreen = ({ navigation }) => {
       <ScrollViewContainer>
         <TouchableOpacity onPress={pickImage}>
           <Avatar
-            source={require('../../../../assets/user-avatar-default.png')}
+            size={150}
+            source={
+              userData.avatar
+                ? { uri: userData.avatar }
+                : require('../../../../assets/user-avatar-default.png')
+            }
           />
         </TouchableOpacity>
         <AuthContainer>

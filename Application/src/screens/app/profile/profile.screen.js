@@ -4,12 +4,12 @@ import { TouchableOpacity, Image } from 'react-native';
 import { AuthenticationContext } from '../../../services/authentication/authentication.context';
 import { SafeArea } from '../../../components/utility/safe-area';
 import {
-  Avatar,
   ButtonEditOutline,
   ButtonLogoutOutline,
   ButtonsWrapper,
   ScrollViewContainer,
 } from './components/profile.styles';
+import { Avatar } from '../../../components/ui/avatar';
 import { Text } from '../../../components/ui/text';
 import { Spacer } from '../../../components/ui/spacer';
 import {
@@ -25,7 +25,9 @@ export const ProfileScreen = ({ navigation, route }) => {
     const getUser = async () => {
       try {
         const uData = await getUserRequest(user.uid);
-        const avatarUser = await getAvatarUser(user.uid);
+        const avatarUser = await getAvatarUser(user.uid).catch((e) =>
+          console.log('no avatar')
+        );
         if (uData.exists) {
           setUserData({ ...uData.data(), avatar: avatarUser });
         }
@@ -42,6 +44,7 @@ export const ProfileScreen = ({ navigation, route }) => {
     <SafeArea>
       <ScrollViewContainer>
         <Avatar
+          size={150}
           source={
             userData.avatar
               ? { uri: userData.avatar }
