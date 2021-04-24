@@ -13,6 +13,14 @@ const CategoryCard = ({ category, onDelete, onUpdate }) => {
     <div className="w-7/12 border mx-auto my-5 p-5 rounded shadow flex items-center justify-between">
       <div>
         <p className="text-2xl font-semibold">{category.name}</p>
+        <p
+          className="text-xs p-1 rounded antialiased text-white mt-1"
+          style={{
+            backgroundColor: category.color,
+          }}
+        >
+          {category.id}
+        </p>
       </div>
       <div className="flex space-x-2 text-white">
         <button
