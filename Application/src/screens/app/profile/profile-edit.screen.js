@@ -57,16 +57,26 @@ export const ProfileEditScreen = ({ navigation }) => {
     }
   };
 
+  const onPressEdit = async () => {
+    await onUpdateProfile(
+      userData,
+      firstName,
+      lastName,
+      email,
+      city,
+      description,
+      image
+    );
+    navigation.navigate('Profile');
+  };
+
   useEffect(() => {
     const getUser = async () => {
       try {
         const uData = await getUserRequest(user.uid);
-        const avatarUser = await getAvatarUser(user.uid).catch((e) =>
-          console.log('no avatar')
-        );
         if (uData.exists) {
           const newUser = uData.data();
-          setUserData({ ...newUser, avatar: avatarUser });
+          setUserData({ ...newUser });
           setFirstName(newUser.firstName);
           setLastName(newUser.lastName);
           setDescription(newUser.description);
@@ -157,20 +167,7 @@ export const ProfileEditScreen = ({ navigation }) => {
             <SeparatorBlack />
           </Spacer>
           <Spacer position="top" size="xl">
-            <AuthButton
-              color="primaryLight"
-              onPress={() =>
-                onUpdateProfile(
-                  userData,
-                  firstName,
-                  lastName,
-                  email,
-                  city,
-                  description,
-                  image
-                )
-              }
-            >
+            <AuthButton color="primaryLight" onPress={onPressEdit}>
               {isLoading ? (
                 <ActivityIndicator />
               ) : (

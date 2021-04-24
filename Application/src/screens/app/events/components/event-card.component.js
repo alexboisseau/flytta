@@ -15,6 +15,7 @@ import {
   EventCardFooter,
   PaddingX,
 } from './event-card.styles';
+import { Avatar } from '../../../../components/ui/avatar';
 
 export const EventCard = ({ event = {} }) => {
   return (
@@ -68,11 +69,16 @@ export const EventCard = ({ event = {} }) => {
               {event.maxPeople} places restantes
             </Text>
             <EventCardInfosItem>
-              <EventCardInfosItemIcon
-                name="ios-person-circle"
-                size={32}
-                color="gray"
-              />
+              <Spacer position="right" size="md">
+                <Avatar
+                  size={35}
+                  source={
+                    event.creator.avatar
+                      ? { uri: event.creator.avatar }
+                      : require('../../../../../assets/user-avatar-default.png')
+                  }
+                />
+              </Spacer>
               <EventCardInfosItemText>
                 {event.creator.firstName} {event.creator.lastName}
               </EventCardInfosItemText>

@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { TouchableOpacity, Image } from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { AuthenticationContext } from '../../../services/authentication/authentication.context';
 import { SafeArea } from '../../../components/utility/safe-area';
@@ -12,33 +12,28 @@ import {
 import { Avatar } from '../../../components/ui/avatar';
 import { Text } from '../../../components/ui/text';
 import { Spacer } from '../../../components/ui/spacer';
-import {
-  getAvatarUser,
-  getUserRequest,
-} from '../../../services/authentication/authentication.service';
+import { getUserRequest } from '../../../services/authentication/authentication.service';
 
 export const ProfileScreen = ({ navigation, route }) => {
   const { user, onLogout } = useContext(AuthenticationContext);
   const [userData, setUserData] = useState({});
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const uData = await getUserRequest(user.uid);
-        const avatarUser = await getAvatarUser(user.uid).catch((e) =>
-          console.log('no avatar')
-        );
-        if (uData.exists) {
-          setUserData({ ...uData.data(), avatar: avatarUser });
-        }
-      } catch (e) {
-        console.error(e);
+  const getUser = async () => {
+    try {
+      const uData = await getUserRequest(user.uid);
+      if (uData.exists) {
+        setUserData({ ...uData.data() });
       }
-    };
-    getUser();
-  }, [user]);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
-  console.log(userData);
+  useFocusEffect(
+    useCallback(() => {
+      getUser();
+    }, [user])
+  );
 
   return (
     <SafeArea>

@@ -186,6 +186,22 @@ export const EventsShow = ({ navigation, route }) => {
           </Spacer>
         </BgWhite>
 
+        {eventMembers.hasOwnProperty(user.uid) &&
+          eventMembers[user.uid] === 'accepted' && (
+            <Spacer position="top" size="md">
+              <BgWhite>
+                <PaddingX>
+                  <Text sm bold>
+                    ADDRESSE DE RENDEZ-VOUS
+                  </Text>
+                  <Spacer position="top" size="md">
+                    <Text sm>{event.address}</Text>
+                  </Spacer>
+                </PaddingX>
+              </BgWhite>
+            </Spacer>
+          )}
+
         <Spacer position="top" size="md">
           <BgWhite>
             <PaddingX>

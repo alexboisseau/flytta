@@ -2,6 +2,7 @@ import React, { useState, createContext } from 'react';
 import * as firebase from 'firebase';
 
 import {
+  getAvatarUser,
   loginRequest,
   registerRequest,
   updateUser,
@@ -56,9 +57,10 @@ export const AuthenticationContextProvider = ({ children }) => {
       newUser.email = email;
       newUser.city = city;
       newUser.description = description;
-      await updateUser(newUser);
       await updateUserAvatarRequest(image, newUser.userId);
-      console.log('yesss');
+      const urlAvatar = await getAvatarUser(newUser.userId);
+      newUser.avatar = urlAvatar;
+      await updateUser(newUser);
     } catch (e) {
       setError(e.toString());
     }
