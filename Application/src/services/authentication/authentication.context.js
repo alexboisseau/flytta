@@ -109,6 +109,9 @@ export const AuthenticationContextProvider = ({ children }) => {
     firebase.auth().signOut();
   };
 
+  const onPasswordUpdate = (email) =>
+    firebase.auth().sendPasswordResetEmail(email);
+
   return (
     <AuthenticationContext.Provider
       value={{
@@ -121,6 +124,7 @@ export const AuthenticationContextProvider = ({ children }) => {
         onLogout,
         clearError,
         onUpdateProfile,
+        onPasswordUpdate,
       }}
     >
       {children}

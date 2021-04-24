@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { EventsNavigator } from './events.navigator';
 import { HomeNavigator } from './home.navigator';
 import { ProfileNavigator } from './profile.navigator';
-import { MessagesScreen } from '../../screens/app/messages/messages.screen';
+import { ChatNavigator } from './chat.navigator';
 
 const TAB_ICON = {
   Home: 'ios-home',
@@ -44,7 +44,7 @@ export const AppNavigator = () => {
     >
       <AppTab.Screen name="Home" component={HomeNavigator} />
       <AppTab.Screen name="Events" component={EventsNavigator} />
-      <AppTab.Screen name="Messages" component={MessagesScreen} />
+      <AppTab.Screen name="Messages" component={ChatNavigator} />
       <AppTab.Screen name="Profile" component={ProfileNavigator} />
     </AppTab.Navigator>
   );
