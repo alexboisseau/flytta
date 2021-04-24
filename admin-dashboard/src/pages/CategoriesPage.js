@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { deleteCategory, updateCategory } from '../services/Categories';
+import { css } from '@emotion/core';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 // STYLES / COMPONENTS / PAGES
 import Header from '../components/Header/Header';
@@ -11,16 +13,26 @@ import MainTitle from '../components/MainTitle';
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Création du css pour le spinner de chargement
+  const spinnerStyle = css`
+    display: block;
+    margin: auto;
+    margin-top: 50px;
+  `;
 
   // Récupération des catégories dans Firestore
   const getCategories = async () => {
     try {
       setCategories([]);
       fetchCategories().then(categories => {
+        setIsLoading(true);
         categories.forEach(c => {
           const category = { id: c.id, ...c.data() };
           setCategories(categories => [...categories, category]);
         });
+        setIsLoading(false);
       });
     } catch (error) {
       console.error(error);
@@ -64,11 +76,20 @@ const CategoriesPage = () => {
         onSearch={getCategories}
         value={search}
       />
-      <CategoriesList
-        categories={filteredCategories}
-        onDelete={handleDelete}
-        onUpdate={handleUpdate}
-      ></CategoriesList>
+      {isLoading ? (
+        <ClipLoader
+          color="#0b1f51"
+          loading={isLoading}
+          css={spinnerStyle}
+          size={35}
+        />
+      ) : (
+        <CategoriesList
+          categories={filteredCategories}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+        ></CategoriesList>
+      )}
     </>
   );
 };

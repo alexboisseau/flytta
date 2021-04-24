@@ -6,6 +6,8 @@ import {
 } from '../services/EventsService';
 import { getByReference, getErrorMessage } from '../services/FunctionsServices';
 import { Notyf } from 'notyf';
+import { css } from '@emotion/core';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 // PAGES / COMPONENTS / STYLES
 import Header from '../components/Header/Header';
@@ -16,12 +18,21 @@ import { EventsList } from '../components/Events/EventsList';
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Création du css pour le spinner de chargement
+  const spinnerStyle = css`
+    display: block;
+    margin: auto;
+    margin-top: 50px;
+  `;
 
   // Récupère les évènements puis met à jour le state des events
   const getEvents = function () {
     try {
       setEvents([]);
       fetchEvents().then(events => {
+        setIsLoading(true);
         events.forEach(async e => {
           const event = { eventId: e.id, ...e.data() };
           event.category = await getByReference(
@@ -30,6 +41,7 @@ const EventsPage = () => {
           );
           setEvents(events => [...events, event]);
         });
+        setIsLoading(false);
       });
     } catch (error) {
       const notyf = new Notyf();
@@ -78,11 +90,20 @@ const EventsPage = () => {
         onSearch={getEvents}
         value={search}
       />
-      <EventsList
-        events={filteredEvents}
-        onDelete={handleDelete}
-        onUpdate={handleUpdate}
-      />
+      {isLoading ? (
+        <ClipLoader
+          color="#0b1f51"
+          loading={isLoading}
+          css={spinnerStyle}
+          size={35}
+        />
+      ) : (
+        <EventsList
+          events={filteredEvents}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+        />
+      )}
     </>
   );
 };
