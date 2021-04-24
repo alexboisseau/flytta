@@ -18,7 +18,9 @@ export const EventsScreen = ({ navigation }) => {
   const [createdEvents, setCreatedEvents] = useState([]); // Events created by the current user
   const [registeredEvents, setRegisteredEvents] = useState([]); // Events to which the user is registered
   const [showCreateEvts, setShowCreateEvts] = useState(true);
-  const [changeBtnValue, setChangeBtnValue] = useState('Mes évènements créés');
+  const [changeBtnValue, setChangeBtnValue] = useState(
+    'Les évènements auxquels je suis inscrit'
+  );
   const { user } = useContext(AuthenticationContext);
 
   const getCreatedEvents = async () => {
