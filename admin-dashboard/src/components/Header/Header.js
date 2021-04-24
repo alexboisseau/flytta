@@ -6,6 +6,7 @@ import { Notyf } from 'notyf';
 
 // PAGES / COMPONENTS / STYLES
 import './Header.css';
+import LogoutIcon from '../../assets/svgIcons/LogoutIcon';
 
 const Header = () => {
   const signOut = function () {
@@ -24,7 +25,7 @@ const Header = () => {
       <Link to="/" className="text-3xl">
         Flytta Admin
       </Link>
-      <ul className="flex space-x-5">
+      <ul className="flex items-center space-x-5">
         <Link to="/users" className="hover:underline">
           Utilisateurs
         </Link>
@@ -36,13 +37,12 @@ const Header = () => {
         </Link>
         <Link
           to="/"
-          className="hover:underline"
+          className="bg-white hover:bg-gray-200 rounded p-2 flex items-center justify-center space-x-2"
           onClick={signOut}
           id="signOutButton"
         >
-          <span className="p-3 bg-white rounded hover:bg-gray-200">
-            Déconnexion
-          </span>
+          <LogoutIcon></LogoutIcon>
+          <span>Déconnexion</span>
         </Link>
       </ul>
     </header>
