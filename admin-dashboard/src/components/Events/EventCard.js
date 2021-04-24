@@ -13,7 +13,10 @@ const EventCard = ({ event, onDelete, onUpdate }) => {
     <div className="w-7/12 border mx-auto my-5 p-5 rounded shadow flex items-center justify-between">
       <div>
         <p className="text-2xl font-semibold">{event.name}</p>
-        <span className="text-sm p-1 rounded bg-gray-200">
+        <span
+          className="text-sm p-1 rounded text-white"
+          style={{ backgroundColor: event.category.color }}
+        >
           {event.category.name}
         </span>
         <p className="text-sm antialiased text-gray-500 mt-1">
