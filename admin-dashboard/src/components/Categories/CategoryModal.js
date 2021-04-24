@@ -3,7 +3,13 @@ import ReactDOM from 'react-dom';
 
 import '../Modal.css';
 
-const CategoryModal = ({ isShowing, hide, category, onSubmit }) => {
+const CategoryModal = ({
+  isShowing,
+  hide,
+  category,
+  onSubmit,
+  create = false,
+}) => {
   const [currentCategory, setCurrentCategory] = useState(category);
 
   const handleChange = function (event) {
@@ -20,10 +26,17 @@ const CategoryModal = ({ isShowing, hide, category, onSubmit }) => {
             <div className="modal-wrapper">
               <div className="modal">
                 <div className="modal-header">
-                  <h4 className="text-2xl font-bold">
-                    Modifier les informations de la catégorie :{' '}
-                    {currentCategory.name}
-                  </h4>
+                  {create ? (
+                    <h4 className="text-2xl font-bold">
+                      Création d'une nouvelle catégorie
+                    </h4>
+                  ) : (
+                    <h4 className="text-2xl font-bold">
+                      Modifier les informations de la catégorie :
+                      {' ' + currentCategory.name}
+                    </h4>
+                  )}
+
                   <button
                     type="button"
                     className="modal-close-button"

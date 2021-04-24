@@ -5,15 +5,19 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 // STYLES / COMPONENTS / PAGES
 import Header from '../components/Header/Header';
-import { fetchCategories } from '../services/Categories';
+import { fetchCategories, createCategory } from '../services/Categories';
 import CategoriesList from '../components/Categories/CategoriesList';
 import FilterField from '../components/FilterField/FilterField';
 import MainTitle from '../components/MainTitle';
+import PlusIcon from '../assets/svgIcons/PlusIcon';
+import useModal from '../hooks/useModal';
+import CategoryModal from '../components/Categories/CategoryModal';
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const { isShowing, toggle } = useModal();
 
   // Création du css pour le spinner de chargement
   const spinnerStyle = css`
@@ -44,11 +48,18 @@ const CategoriesPage = () => {
     deleteCategory(category).then(getCategories());
   };
 
-  // Gestion de la mise à jour d'un utilisateur
+  // Gestion de la mise à jour d'une catégorie
   const handleUpdate = function (event, category) {
     event.preventDefault();
     updateCategory(category);
-    setTimeout(() => getCategories(), 500);
+    setTimeout(() => getCategories(), 300);
+  };
+
+  // Gestion de la création d'une catégorie
+  const handleCreate = function (event, category) {
+    event.preventDefault();
+    createCategory(category);
+    setTimeout(() => getCategories(), 300);
   };
 
   // Fonction qui met à jour la valeur dans la barre de recherche pour filtrer ensuite les données
@@ -76,6 +87,15 @@ const CategoriesPage = () => {
         onSearch={getCategories}
         value={search}
       />
+      <div className="text-center my-5">
+        <button
+          onClick={toggle}
+          className="bg-gray-200 hover:bg-gray-300 p-3 rounded m-auto flex items-center space-x-2"
+        >
+          <PlusIcon></PlusIcon>
+          <span>Nouvelle catégorie</span>
+        </button>
+      </div>
       {isLoading ? (
         <ClipLoader
           color="#0b1f51"
@@ -90,6 +110,13 @@ const CategoriesPage = () => {
           onUpdate={handleUpdate}
         ></CategoriesList>
       )}
+      <CategoryModal
+        isShowing={isShowing}
+        hide={toggle}
+        category={{ name: '', color: '' }}
+        onSubmit={handleCreate}
+        create={true}
+      />
     </>
   );
 };

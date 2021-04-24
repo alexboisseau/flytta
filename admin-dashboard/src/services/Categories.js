@@ -42,3 +42,10 @@ export const updateCategory = async function (category) {
     )
     .catch(error => notyf.error(`${getErrorMessage(error.code)}💥`));
 };
+
+export const createCategory = async function (category) {
+  category.createdAt = new Date();
+  category.updateAt = new Date();
+
+  db.collection('categories').add(category);
+};
