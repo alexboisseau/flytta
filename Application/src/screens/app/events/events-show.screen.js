@@ -163,7 +163,8 @@ export const EventsShow = ({ navigation, route }) => {
             <PaddingX>
               <EventCardFooter>
                 <Text md bold>
-                  {event.maxPeople} places restantes
+                  {event.maxPeople - (Object.keys(event.members).length || 0)}{' '}
+                  places restantes
                 </Text>
                 <TouchableOpacity
                   onPress={() =>

@@ -66,7 +66,8 @@ export const EventCard = ({ event = {} }) => {
         <PaddingX>
           <EventCardFooter>
             <Text md bold>
-              {event.maxPeople} places restantes
+              {event.maxPeople - (Object.keys(event.members).length || 0)}{' '}
+              places restantes
             </Text>
             <EventCardInfosItem>
               <Spacer position="right" size="md">
