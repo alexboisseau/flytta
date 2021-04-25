@@ -1,12 +1,10 @@
 import React from 'react';
 import useModal from '../../hooks/useModal';
 import CategoryModal from './CategoryModal';
-
-// STYLES / COMPONENTS / PAGES
 import TrashIcon from '../../assets/svgIcons/TrashIcon';
 import EditIcon from '../../assets/svgIcons/EditIcon';
 
-const CategoryCard = ({ category, onDelete, onUpdate }) => {
+const CategoryCard = function ({ category, onDelete, onUpdate }) {
   const { isShowing, toggle } = useModal();
 
   return (

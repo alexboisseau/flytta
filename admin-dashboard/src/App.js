@@ -3,10 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { auth } from './firebase';
 import UserContext from './providers/UserProvider';
-
-// PAGES AND COMPONENTS
 import LoginPage from './pages/LoginPage';
-import HomePage from './pages/HomePage';
 import CategoriesPage from './pages/CategoriesPage';
 import UsersPage from './pages/UsersPage';
 import EventsPage from './pages/EventsPage';

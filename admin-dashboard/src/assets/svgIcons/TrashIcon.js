@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TrashIcon = () => {
+const TrashIcon = function () {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

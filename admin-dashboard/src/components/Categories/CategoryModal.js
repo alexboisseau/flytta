@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 
 import '../Modal.css';
 
-const CategoryModal = ({
+const CategoryModal = function ({
   isShowing,
   hide,
   category,
   onSubmit,
   create = false,
-}) => {
+}) {
   const [currentCategory, setCurrentCategory] = useState(category);
 
   const handleChange = function (event) {
@@ -48,8 +48,8 @@ const CategoryModal = ({
                 <div className="modal-body">
                   <form
                     className="flex flex-col space-y-2"
-                    onSubmit={event => {
-                      onSubmit(event, currentCategory);
+                    onSubmit={() => {
+                      onSubmit(currentCategory);
                       hide();
                     }}
                   >

@@ -4,14 +4,18 @@ import { Notyf } from 'notyf';
 
 // Récupère toutes les évènements stockés dans FireStore
 export const fetchEvents = async function () {
+  const notyf = new Notyf();
   return db
     .collection('events')
     .get()
-    .then(res => res);
+    .then(res => res)
+    .catch(error => {
+      notyf.error(`${getErrorMessage(error.code)} 💥`);
+    });
 };
 
-// Supprime un évènement dans Firestore puis affiche un message de succès où d'erreur
-export const deleteEvent = function (event) {
+// Supprime un évènement dans Firestore puis affiche un message de succès où d'erreur selon le résultat de la requête
+export const deleteEvent = async function (event) {
   const notyf = new Notyf();
 
   return db
@@ -24,8 +28,8 @@ export const deleteEvent = function (event) {
     });
 };
 
-// Met à jour un évènement dans Firestore puis affiche un message de succès où d'erreur
-export const updateEvent = function (event) {
+// Met à jour un évènement dans Firestore puis affiche un message de succès où d'erreur selon le résultat de la requête
+export const updateEvent = async function (event) {
   const notyf = new Notyf();
 
   // Shallow Copy de l'évènement pour pouvoir supprimer les informations que nous avions ajouté dans le champs category le temps de travailler avec l'évènement.

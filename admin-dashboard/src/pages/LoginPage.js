@@ -3,12 +3,10 @@ import { auth } from '../firebase';
 import { checkIsAdmin } from '../services/AuthService';
 import { getErrorMessage } from '../services/FunctionsServices';
 import { Notyf } from 'notyf';
-
-// PAGES AND COMPONENTS
 import './LoginPage.css';
 import Input from '../components/Input';
 
-const LoginPage = () => {
+const LoginPage = function () {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -26,17 +24,16 @@ const LoginPage = () => {
     const notyf = new Notyf();
 
     try {
-      const isAdmin = await checkIsAdmin(email);
+      const { isAdmin, userName } = await checkIsAdmin(email);
 
       if (isAdmin) {
         auth
           .signInWithEmailAndPassword(email, password)
           .then(res => {
-            notyf.success('Vous êtes connecté 🎉');
+            notyf.success(`Bienvenue ${userName} 👋`);
           })
           .catch(error => {
             notyf.error(`${getErrorMessage(error.code)} 💥`);
-            console.log(error);
           });
       } else {
         notyf.error("Vous n'êtes pas administrateur de Flytta 💥");

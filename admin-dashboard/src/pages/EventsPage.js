@@ -8,14 +8,12 @@ import { getByReference, getErrorMessage } from '../services/FunctionsServices';
 import { Notyf } from 'notyf';
 import { css } from '@emotion/core';
 import ClipLoader from 'react-spinners/ClipLoader';
-
-// PAGES / COMPONENTS / STYLES
 import Header from '../components/Header/Header';
 import MainTitle from '../components/MainTitle';
 import FilterField from '../components/FilterField/FilterField';
 import { EventsList } from '../components/Events/EventsList';
 
-const EventsPage = () => {
+const EventsPage = function () {
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);

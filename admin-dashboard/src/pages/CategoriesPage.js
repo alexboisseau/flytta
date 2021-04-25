@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { deleteCategory, updateCategory } from '../services/Categories';
 import { css } from '@emotion/core';
 import ClipLoader from 'react-spinners/ClipLoader';
-
-// STYLES / COMPONENTS / PAGES
 import Header from '../components/Header/Header';
 import { fetchCategories, createCategory } from '../services/Categories';
 import CategoriesList from '../components/Categories/CategoriesList';
@@ -13,7 +11,7 @@ import PlusIcon from '../assets/svgIcons/PlusIcon';
 import useModal from '../hooks/useModal';
 import CategoryModal from '../components/Categories/CategoryModal';
 
-const CategoriesPage = () => {
+const CategoriesPage = function () {
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +25,7 @@ const CategoriesPage = () => {
   `;
 
   // Récupération des catégories dans Firestore
-  const getCategories = async () => {
+  const getCategories = async function () {
     try {
       setCategories([]);
       fetchCategories().then(categories => {
@@ -45,25 +43,24 @@ const CategoriesPage = () => {
 
   // Gestion de la suppression d'une catégorie
   const handleDelete = function (category) {
-    deleteCategory(category).then(getCategories());
+    deleteCategory(category);
+    setTimeout(() => getCategories(), 300);
   };
 
   // Gestion de la mise à jour d'une catégorie
-  const handleUpdate = function (event, category) {
-    event.preventDefault();
+  const handleUpdate = function (category) {
     updateCategory(category);
     setTimeout(() => getCategories(), 300);
   };
 
   // Gestion de la création d'une catégorie
-  const handleCreate = function (event, category) {
-    event.preventDefault();
+  const handleCreate = function (category) {
     createCategory(category);
     setTimeout(() => getCategories(), 300);
   };
 
   // Fonction qui met à jour la valeur dans la barre de recherche pour filtrer ensuite les données
-  const handleSearch = ({ currentTarget }) => {
+  const handleSearch = function ({ currentTarget }) {
     setSearch(currentTarget.value);
   };
 

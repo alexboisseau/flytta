@@ -3,14 +3,12 @@ import { fetchUsers, deleteUser, updateUser } from '../services/UsersService';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { css } from '@emotion/core';
 import { Notyf } from 'notyf';
-
-// PAGES / COMPONENTS / STYLES
 import Header from '../components/Header/Header';
 import MainTitle from '../components/MainTitle';
 import FilterField from '../components/FilterField/FilterField';
 import { UsersList } from '../components/Users/UsersList';
 
-const UsersPage = () => {
+const UsersPage = function () {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +21,7 @@ const UsersPage = () => {
   `;
 
   // Récupération des utilisateurs dans Firestore pour ensuite les passer au component UsersList
-  const getUsers = async () => {
+  const getUsers = async function () {
     try {
       setUsers([]);
       fetchUsers().then(users => {
@@ -39,7 +37,6 @@ const UsersPage = () => {
       notyf.error(
         'Un problème est survenu ... Merci de rééssayer plus tard ❌'
       );
-      console.error(error);
     }
   };
 
@@ -56,7 +53,7 @@ const UsersPage = () => {
   };
 
   // Fonction qui met à jour la valeur dans la barre de recherche pour filtrer ensuite les données
-  const handleSearch = ({ currentTarget }) => {
+  const handleSearch = function ({ currentTarget }) {
     setSearch(currentTarget.value);
   };
 

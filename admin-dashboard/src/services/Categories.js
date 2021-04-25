@@ -4,10 +4,18 @@ import { getErrorMessage } from './FunctionsServices';
 
 // Récupère toutes les catégories depuis Firestore
 export const fetchCategories = async function () {
-  return db.collection('categories').get();
+  const notyf = new Notyf();
+
+  return db
+    .collection('categories')
+    .get()
+    .then(res => res)
+    .catch(error => {
+      notyf.error(`${getErrorMessage(error.code)} 💥`);
+    });
 };
 
-// Supprime une catégorie dans Firestore et renvoie un message d'erreur où de succès
+// Supprime une catégorie dans Firestore et renvoie un message d'erreur ou de succès selon le résultat de la requête
 export const deleteCategory = async function (category) {
   const notyf = new Notyf();
 
@@ -23,6 +31,7 @@ export const deleteCategory = async function (category) {
     });
 };
 
+// Met à jour une catégorie dans Firestore et renvoie un message d'erreur ou de succès selon le résultat de la requête
 export const updateCategory = async function (category) {
   const notyf = new Notyf();
 
@@ -43,9 +52,17 @@ export const updateCategory = async function (category) {
     .catch(error => notyf.error(`${getErrorMessage(error.code)}💥`));
 };
 
+// Créé une nouvelle catégorie dans Firestore
 export const createCategory = async function (category) {
   category.createdAt = new Date();
   category.updateAt = new Date();
 
-  db.collection('categories').add(category);
+  const notyf = new Notyf();
+
+  db.collection('categories')
+    .add(category)
+    .then(res => {
+      notyf.success(`La catégorie ${category.name} a bien été créée ✅`);
+    })
+    .catch(error => notyf.error(`${getErrorMessage(error.code)}💥`));
 };

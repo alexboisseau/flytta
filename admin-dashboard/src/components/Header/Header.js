@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 import { auth } from '../../firebase';
 import { getErrorMessage } from '../../services/FunctionsServices';
 import { Notyf } from 'notyf';
-
-// PAGES / COMPONENTS / STYLES
 import './Header.css';
 import LogoutIcon from '../../assets/svgIcons/LogoutIcon';
 
-const Header = () => {
+const Header = function () {
   const signOut = function () {
     const notyf = new Notyf();
     try {
@@ -16,7 +14,6 @@ const Header = () => {
       notyf.success(`Vous êtes bien déconnecté ✅`);
     } catch (error) {
       notyf.error(`${getErrorMessage(error.code)} 💥`);
-      console.log(error);
     }
   };
 

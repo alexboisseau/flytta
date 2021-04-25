@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { fetchCategories } from '../../../services/Categories';
-import Input from '../../Input';
+import { fetchCategories } from '../../services/Categories';
+import Input from '../Input';
+import '../Modal.css';
 
-import '../../Modal.css';
-
-const EventModal = ({ isShowing, hide, event, onSubmit }) => {
+const EventModal = function ({ isShowing, hide, event, onSubmit }) {
   const [currentEvent, setCurrentEvent] = useState(event);
   const [categories, setCategories] = useState([]);
 
@@ -153,6 +152,7 @@ const EventModal = ({ isShowing, hide, event, onSubmit }) => {
                         {categories.map(c => (
                           <option
                             value={c.categoryId}
+                            key={c.categoryId}
                             selected={
                               c.categoryId === currentEvent.categoryId
                                 ? 'selected'

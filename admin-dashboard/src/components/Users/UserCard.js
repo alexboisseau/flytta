@@ -1,12 +1,10 @@
 import React from 'react';
 import useModal from '../../hooks/useModal';
 import UserModal from './UserModal';
-
-// STYLES / COMPONENTS / PAGES
 import TrashIcon from '../../assets/svgIcons/TrashIcon';
 import EditIcon from '../../assets/svgIcons/EditIcon';
 
-const UserCard = ({ user, onDelete, onUpdate }) => {
+const UserCard = function ({ user, onDelete, onUpdate }) {
   const { isShowing, toggle } = useModal();
 
   return (

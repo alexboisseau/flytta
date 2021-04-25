@@ -1,12 +1,10 @@
 import React from 'react';
 import useModal from '../../hooks/useModal';
-import EventModal from './Modal/EventModal';
-
-// STYLES / COMPONENTS / PAGES
+import EventModal from './EventModal';
 import TrashIcon from '../../assets/svgIcons/TrashIcon';
 import EditIcon from '../../assets/svgIcons/EditIcon';
 
-const EventCard = ({ event, onDelete, onUpdate }) => {
+const EventCard = function ({ event, onDelete, onUpdate }) {
   const { isShowing, toggle } = useModal();
 
   return (

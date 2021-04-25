@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import '../Modal.css';
 
-const UserModal = ({ isShowing, hide, user, onSubmit }) => {
+const UserModal = function ({ isShowing, hide, user, onSubmit }) {
   const [currentUser, setCurrentUser] = useState(user);
 
   const handleChange = function (event) {

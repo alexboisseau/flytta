@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Input = ({
+const Input = function ({
   name,
   type,
   placeholder = '',
@@ -9,7 +9,7 @@ const Input = ({
   className,
   label,
   classNameLabel,
-}) => {
+}) {
   return (
     <>
       {label ? (
