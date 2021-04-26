@@ -1,5 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { EventsNavigator } from './events.navigator';
@@ -25,11 +26,14 @@ const tabBarIcon = (iconName) => ({ focused, color, size }) => (
 );
 
 const createScreenOptions = ({ route }) => {
+  const routeName = getFocusedRouteNameFromRoute(route);
+
   const iconName =
     TAB_ICON[route.name === 'Evénements' ? 'Events' : route.name];
   return {
     tabBarIcon: tabBarIcon(iconName),
     tabBarLabel: () => null,
+    tabBarVisible: routeName === 'ChatConversation' ? false : true,
   };
 };
 

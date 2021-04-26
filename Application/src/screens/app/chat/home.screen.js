@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
 
 import { AuthenticationContext } from '../../../services/authentication/authentication.context';
@@ -21,23 +22,29 @@ export const ChatHomeScreen = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    fetchConversations();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchConversations();
+    }, [])
+  );
 
   return (
     <SafeArea>
       <FlatList
         data={conversations}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('ChatConversation', { conversation: item })
-            }
-          >
-            <ConversationCard conversation={item} />
-          </TouchableOpacity>
-        )}
+        renderItem={({ item }) => {
+          return (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('ChatConversation', {
+                  conversation: item,
+                })
+              }
+            >
+              <ConversationCard conversation={item} />
+            </TouchableOpacity>
+          );
+        }}
         keyExtractor={(conversation) => conversation.id}
       />
     </SafeArea>

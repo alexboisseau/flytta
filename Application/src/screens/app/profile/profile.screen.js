@@ -13,17 +13,28 @@ import { Avatar } from '../../../components/ui/avatar';
 import { Text } from '../../../components/ui/text';
 import { Spacer } from '../../../components/ui/spacer';
 import { getUserRequest } from '../../../services/authentication/authentication.service';
+import { createConversation } from '../../../services/conversations/conversations.service';
 
 export const ProfileScreen = ({ navigation, route }) => {
   const { user, onLogout } = useContext(AuthenticationContext);
+  const userId = route.params ? route.params.userId : user.uid;
   const [userData, setUserData] = useState({});
 
   const getUser = async () => {
     try {
-      const uData = await getUserRequest(user.uid);
+      const uData = await getUserRequest(userId);
       if (uData.exists) {
         setUserData({ ...uData.data() });
       }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const onNewMessage = async () => {
+    try {
+      await createConversation(userData.userId.trim());
+      navigation.navigate('Messages', { screen: 'ChatHome' });
     } catch (e) {
       console.error(e);
     }
@@ -59,9 +70,7 @@ export const ProfileScreen = ({ navigation, route }) => {
             {route.params ? (
               <>
                 <Spacer position="right" size="md">
-                  <ButtonEditOutline
-                    onPress={() => navigation.navigate('ProfileEdit')}
-                  >
+                  <ButtonEditOutline onPress={onNewMessage}>
                     <Text color="blue">Message</Text>
                   </ButtonEditOutline>
                 </Spacer>

@@ -33,17 +33,23 @@ export const ConversationCard = ({ conversation }) => {
                 </Text>
                 <Spacer>
                   <Text xs>
-                    {conversation.lastMessage.content.slice(0, 25)}...
+                    {conversation.lastMessage &&
+                      `${conversation.lastMessage.slice(0, 25)}...`}
                   </Text>
                 </Spacer>
               </View>
             </Spacer>
           </ConversationCardAvatarWrapper>
           <Text>
-            {new Date(conversation.lastMessage.send.seconds * 1000).getHours()}:
-            {new Date(
-              conversation.lastMessage.send.seconds * 1000
-            ).getSeconds()}
+            {new Date(conversation.lastSend.seconds * 1000).getHours() < 10
+              ? `0${new Date(conversation.lastSend.seconds * 1000).getHours()}`
+              : new Date(conversation.lastSend.seconds * 1000).getHours()}
+            :
+            {new Date(conversation.lastSend.seconds * 1000).getMinutes() < 10
+              ? `0${new Date(
+                  conversation.lastSend.seconds * 1000
+                ).getMinutes()}`
+              : new Date(conversation.lastSend.seconds * 1000).getMinutes()}
           </Text>
         </ConversationCardWrapper>
       </ConversationCardContainer>

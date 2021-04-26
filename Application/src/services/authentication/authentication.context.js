@@ -57,9 +57,11 @@ export const AuthenticationContextProvider = ({ children }) => {
       newUser.email = email;
       newUser.city = city;
       newUser.description = description;
-      await updateUserAvatarRequest(image, newUser.userId);
-      const urlAvatar = await getAvatarUser(newUser.userId);
-      newUser.avatar = urlAvatar;
+      if (image) {
+        await updateUserAvatarRequest(image, newUser.userId);
+        const urlAvatar = await getAvatarUser(newUser.userId);
+        newUser.avatar = urlAvatar;
+      }
       await updateUser(newUser);
     } catch (e) {
       setError(e.toString());
@@ -88,12 +90,13 @@ export const AuthenticationContextProvider = ({ children }) => {
     try {
       const u = await registerRequest(email, password);
       await firebase.firestore().collection('users').doc(u.user.uid).set({
-        userUid: u.user.uid,
+        userId: u.user.uid,
         firstName,
         lastName,
         city,
         birthdayDate,
         email,
+        avatar: '',
         isAdmin: false,
       });
       setUser(u);

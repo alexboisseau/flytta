@@ -107,9 +107,7 @@ export const EventsShow = ({ navigation, route }) => {
   const getCreator = async (event) => {
     try {
       const userData = await getCreatorData(event.creatorId);
-      userData.docs.map((doc) => {
-        setCreatorData(doc.data());
-      });
+      setCreatorData(userData.data());
     } catch (e) {
       console.error(e);
     }
@@ -124,236 +122,233 @@ export const EventsShow = ({ navigation, route }) => {
 
   return (
     <SafeArea>
-      <ScrollView>
-        <BgWhite>
+      <BgWhite>
+        <PaddingX>
+          <EventCardHeader>
+            <Text lg bold>
+              {event.name}
+            </Text>
+            <EventCardCategory color={event.category.color}>
+              <EventCardCategoryText>
+                {event.category.name}
+              </EventCardCategoryText>
+            </EventCardCategory>
+          </EventCardHeader>
+        </PaddingX>
+        <Spacer position="top" size="lg">
+          <Separator />
+        </Spacer>
+        <Spacer position="top" size="lg">
           <PaddingX>
-            <EventCardHeader>
-              <Text lg bold>
-                {event.name}
-              </Text>
-              <EventCardCategory color={event.category.color}>
-                <EventCardCategoryText>
-                  {event.category.name}
-                </EventCardCategoryText>
-              </EventCardCategory>
-            </EventCardHeader>
+            <EventCardInfos>
+              <EventCardInfosItem>
+                <EventCardInfosItemIcon
+                  name="ios-calendar"
+                  size={16}
+                  color="gray"
+                />
+                <EventCardInfosItemText>
+                  {event.startDate}
+                </EventCardInfosItemText>
+              </EventCardInfosItem>
+              <EventCardInfosItem>
+                <EventCardInfosItemIcon
+                  name="ios-time"
+                  size={16}
+                  color="gray"
+                />
+                <EventCardInfosItemText>
+                  {event.duration} min.
+                </EventCardInfosItemText>
+              </EventCardInfosItem>
+              <EventCardInfosItem>
+                <EventCardInfosItemIcon
+                  name="ios-barbell"
+                  size={16}
+                  color="gray"
+                />
+                <EventCardInfosItemText>{event.level}</EventCardInfosItemText>
+              </EventCardInfosItem>
+            </EventCardInfos>
           </PaddingX>
-          <Spacer position="top" size="lg">
-            <Separator />
-          </Spacer>
-          <Spacer position="top" size="lg">
-            <PaddingX>
-              <EventCardInfos>
+        </Spacer>
+        <Spacer position="top" size="lg">
+          <Separator />
+        </Spacer>
+        <Spacer position="top" size="lg">
+          <PaddingX>
+            <EventCardFooter>
+              <Text md bold>
+                {availablesPlaces} places restantes
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('HomeProfile', {
+                    userId: event.creatorId,
+                  })
+                }
+              >
                 <EventCardInfosItem>
-                  <EventCardInfosItemIcon
-                    name="ios-calendar"
-                    size={16}
-                    color="gray"
-                  />
-                  <EventCardInfosItemText>
-                    {event.startDate}
-                  </EventCardInfosItemText>
-                </EventCardInfosItem>
-                <EventCardInfosItem>
-                  <EventCardInfosItemIcon
-                    name="ios-time"
-                    size={16}
-                    color="gray"
-                  />
-                  <EventCardInfosItemText>
-                    {event.duration} min.
-                  </EventCardInfosItemText>
-                </EventCardInfosItem>
-                <EventCardInfosItem>
-                  <EventCardInfosItemIcon
-                    name="ios-barbell"
-                    size={16}
-                    color="gray"
-                  />
-                  <EventCardInfosItemText>{event.level}</EventCardInfosItemText>
-                </EventCardInfosItem>
-              </EventCardInfos>
-            </PaddingX>
-          </Spacer>
-          <Spacer position="top" size="lg">
-            <Separator />
-          </Spacer>
-          <Spacer position="top" size="lg">
-            <PaddingX>
-              <EventCardFooter>
-                <Text md bold>
-                  {availablesPlaces} places restantes
-                </Text>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('HomeProfile', {
-                      userId: event.creatorId,
-                    })
-                  }
-                >
-                  <EventCardInfosItem>
-                    <Spacer position="right" size="md">
-                      <Avatar
-                        size={35}
-                        source={
-                          creatorData.avatar
-                            ? { uri: creatorData.avatar }
-                            : require('../../../../assets/user-avatar-default.png')
-                        }
-                      />
-                    </Spacer>
-                    <EventCardInfosItemText>
-                      {creatorData.firstName} {creatorData.lastName}
-                    </EventCardInfosItemText>
-                  </EventCardInfosItem>
-                </TouchableOpacity>
-              </EventCardFooter>
-            </PaddingX>
-          </Spacer>
-        </BgWhite>
-
-        {eventMembers.hasOwnProperty(user.uid) &&
-          eventMembers[user.uid] === 'accepted' && (
-            <Spacer position="top" size="md">
-              <BgWhite>
-                <PaddingX>
-                  <Text sm bold>
-                    ADDRESSE DE RENDEZ-VOUS
-                  </Text>
-                  <Spacer position="top" size="md">
-                    <Text sm>{event.address}</Text>
+                  <Spacer position="right" size="md">
+                    <Avatar
+                      size={35}
+                      source={
+                        creatorData.avatar
+                          ? { uri: creatorData.avatar }
+                          : require('../../../../assets/user-avatar-default.png')
+                      }
+                    />
                   </Spacer>
-                </PaddingX>
-              </BgWhite>
-            </Spacer>
-          )}
+                  <EventCardInfosItemText>
+                    {creatorData.firstName} {creatorData.lastName}
+                  </EventCardInfosItemText>
+                </EventCardInfosItem>
+              </TouchableOpacity>
+            </EventCardFooter>
+          </PaddingX>
+        </Spacer>
+      </BgWhite>
 
+      {((eventMembers.hasOwnProperty(user.uid) &&
+        eventMembers[user.uid] === 'accepted') ||
+        event.creatorId === user.uid) && (
         <Spacer position="top" size="md">
           <BgWhite>
             <PaddingX>
               <Text sm bold>
-                DESCRIPTION
+                ADDRESSE DE RENDEZ-VOUS
               </Text>
               <Spacer position="top" size="md">
-                <Text sm>{event.description}</Text>
+                <Text sm>{event.address}</Text>
               </Spacer>
             </PaddingX>
           </BgWhite>
         </Spacer>
+      )}
 
-        <Spacer position="top" size="md">
-          {event.members.hasOwnProperty(user.uid.trim()) &&
-          event.members[user.uid] === 'waiting' ? (
-            <>
-              <ImageBoxCenter>
-                <SvgXml xml={waiting} width={200} height={200} />
-              </ImageBoxCenter>
-              <Text center bold>
-                En attente d'approbation...
-              </Text>
-              <Spacer position="top" size="lg">
+      <Spacer position="top" size="md">
+        <BgWhite>
+          <PaddingX>
+            <Text sm bold>
+              DESCRIPTION
+            </Text>
+            <Spacer position="top" size="md">
+              <Text sm>{event.description}</Text>
+            </Spacer>
+          </PaddingX>
+        </BgWhite>
+      </Spacer>
+
+      <Spacer position="top" size="md">
+        {event.members.hasOwnProperty(user.uid.trim()) &&
+        event.members[user.uid] === 'waiting' ? (
+          <>
+            <ImageBoxCenter>
+              <SvgXml xml={waiting} width={200} height={200} />
+            </ImageBoxCenter>
+            <Text center bold>
+              En attente d'approbation...
+            </Text>
+            <Spacer position="top" size="lg">
+              <PaddingX>
+                <ButtonRed onPress={onEventRemoveJoin}>
+                  <Text color="white" bold center>
+                    Annuler ma demande
+                  </Text>
+                </ButtonRed>
+              </PaddingX>
+            </Spacer>
+          </>
+        ) : (event.members.hasOwnProperty(user.uid) &&
+            event.members[user.uid] === 'accepted') ||
+          event.creatorId === user.uid ? (
+          <>
+            <BgWhite>
+              <PaddingX>
+                <Text sm bold>
+                  MEMBRES
+                </Text>
+                <FlatList
+                  data={membersData}
+                  renderItem={({ item }) => (
+                    <Spacer position="top" size="lg">
+                      <ListItemContainer>
+                        <Text>{item.firstName}</Text>
+                        {event.creatorId === user.uid &&
+                          eventMembers[item.userId] !== 'accepted' && (
+                            <ListItemButtonsContainer>
+                              <TouchableOpacity
+                                onPress={() => onChangeStatusEvent(item, true)}
+                              >
+                                <Ionicons
+                                  name="ios-checkmark-circle"
+                                  size={25}
+                                  color="green"
+                                />
+                              </TouchableOpacity>
+                              <Spacer position="left" size="lg">
+                                <TouchableOpacity
+                                  onPress={() =>
+                                    onChangeStatusEvent(item, false)
+                                  }
+                                >
+                                  <Ionicons
+                                    name="ios-close-circle"
+                                    size={25}
+                                    color="red"
+                                  />
+                                </TouchableOpacity>
+                              </Spacer>
+                            </ListItemButtonsContainer>
+                          )}
+                        {eventMembers[item.userId] === 'accepted' && (
+                          <Text color="green" bold>
+                            Accepté
+                          </Text>
+                        )}
+                      </ListItemContainer>
+                    </Spacer>
+                  )}
+                  keyExtractor={(memberUser) => memberUser.userId}
+                />
+              </PaddingX>
+            </BgWhite>
+            <Spacer position="top" size="md">
+              {event.creatorId === user.uid && (
+                <PaddingX>
+                  <ButtonGreen onPress={() => onUpdateEvent(event)}>
+                    <Text color="white" bold center>
+                      Mettre à jour l'évènement
+                    </Text>
+                  </ButtonGreen>
+                </PaddingX>
+              )}
+            </Spacer>
+            {event.creatorId !== user.uid && (
+              <Spacer position="top" size="md">
                 <PaddingX>
                   <ButtonRed onPress={onEventRemoveJoin}>
                     <Text color="white" bold center>
-                      Annuler ma demande
+                      Quitter l'événement
                     </Text>
                   </ButtonRed>
                 </PaddingX>
               </Spacer>
-            </>
-          ) : (event.members.hasOwnProperty(user.uid) &&
-              event.members[user.uid] === 'accepted') ||
-            event.creatorId === user.uid ? (
-            <>
-              <BgWhite>
-                <PaddingX>
-                  <Text sm bold>
-                    MEMBRES
-                  </Text>
-                  <FlatList
-                    data={membersData}
-                    renderItem={({ item }) => (
-                      <Spacer position="top" size="lg">
-                        <ListItemContainer>
-                          <Text>{item.firstName}</Text>
-                          {event.creatorId === user.uid &&
-                            eventMembers[item.userId] !== 'accepted' && (
-                              <ListItemButtonsContainer>
-                                <TouchableOpacity
-                                  onPress={() =>
-                                    onChangeStatusEvent(item, true)
-                                  }
-                                >
-                                  <Ionicons
-                                    name="ios-checkmark-circle"
-                                    size={25}
-                                    color="green"
-                                  />
-                                </TouchableOpacity>
-                                <Spacer position="left" size="lg">
-                                  <TouchableOpacity
-                                    onPress={() =>
-                                      onChangeStatusEvent(item, false)
-                                    }
-                                  >
-                                    <Ionicons
-                                      name="ios-close-circle"
-                                      size={25}
-                                      color="red"
-                                    />
-                                  </TouchableOpacity>
-                                </Spacer>
-                              </ListItemButtonsContainer>
-                            )}
-                          {eventMembers[item.userId] === 'accepted' && (
-                            <Text color="green" bold>
-                              Accepté
-                            </Text>
-                          )}
-                        </ListItemContainer>
-                      </Spacer>
-                    )}
-                    keyExtractor={(memberUser) => memberUser.userId}
-                  />
-                </PaddingX>
-              </BgWhite>
-              <Spacer position="top" size="md">
-                {event.creatorId === user.uid && (
-                  <PaddingX>
-                    <ButtonGreen onPress={() => onUpdateEvent(event)}>
-                      <Text color="white" bold center>
-                        Mettre à jour l'évènement
-                      </Text>
-                    </ButtonGreen>
-                  </PaddingX>
-                )}
-              </Spacer>
-              {event.creatorId !== user.uid && (
-                <Spacer position="top" size="md">
-                  <PaddingX>
-                    <ButtonRed onPress={onEventRemoveJoin}>
-                      <Text color="white" bold center>
-                        Quitter l'événement
-                      </Text>
-                    </ButtonRed>
-                  </PaddingX>
-                </Spacer>
-              )}
-            </>
-          ) : event.members.hasOwnProperty(user.uid) &&
-            event.members[user.uid] === 'refused' ? (
-            <Text>Refusé désolé...</Text>
-          ) : (
-            <PaddingX>
-              <ButtonGreen onPress={onEventJoin}>
-                <Text color="white" bold center>
-                  Demander à rejoindre l'événement
-                </Text>
-              </ButtonGreen>
-            </PaddingX>
-          )}
-        </Spacer>
-      </ScrollView>
+            )}
+          </>
+        ) : event.members.hasOwnProperty(user.uid) &&
+          event.members[user.uid] === 'refused' ? (
+          <Text>Refusé désolé...</Text>
+        ) : (
+          <PaddingX>
+            <ButtonGreen onPress={onEventJoin}>
+              <Text color="white" bold center>
+                Demander à rejoindre l'événement
+              </Text>
+            </ButtonGreen>
+          </PaddingX>
+        )}
+      </Spacer>
     </SafeArea>
   );
 };

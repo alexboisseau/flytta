@@ -6,19 +6,30 @@ export const getConversations = async (userAuthenticatedId) => {
     .firestore()
     .collection('conversations')
     .where('members', 'array-contains', userAuthenticatedId)
-    .orderBy('lastMessage.send', 'DESC')
+    .orderBy('lastSend', 'desc')
     .get();
 
   return Promise.all(
     conversations.docs.map(async (doc) => {
-      const { lastMessage, members } = doc.data();
+      const { members, lastMessage, lastSend } = doc.data();
       const [recipientId] = members.filter(
         (memberId) => memberId !== userAuthenticatedId
       );
 
+      let lastMessageData = null;
+      if (lastMessage) {
+        lastMessageData = (await lastMessage.get()).data().content;
+      }
+
       const recipientData = (await getByRef('users', recipientId)).data();
 
-      return { id: doc.id, lastMessage, recipient: recipientData };
+      return {
+        id: doc.id,
+        lastMessage: lastMessage ? lastMessageData : null,
+        lastSend,
+        members,
+        recipient: recipientData,
+      };
     })
   );
 };
@@ -47,4 +58,45 @@ export const getMessages = async (conversationId) => {
   );
 };
 
-export const postMessage = (conversationId, userAuthenticatedId) => {};
+export const postMessage = async (conversation, content, recipientId) => {
+  const { members } = conversation;
+  try {
+    const lastMessage = await firebase
+      .firestore()
+      .collection('conversations')
+      .doc(conversation.id)
+      .collection('messages')
+      .add({
+        content,
+        recipient: firebase.firestore().doc(`users/${recipientId.trim()}`),
+        send: firebase.firestore.FieldValue.serverTimestamp(),
+        sender: firebase
+          .firestore()
+          .doc(`users/${firebase.auth().currentUser.uid}`),
+      });
+    await firebase
+      .firestore()
+      .collection('conversations')
+      .doc(conversation.id)
+      .update({
+        lastMessage: firebase
+          .firestore()
+          .collection(`conversations/${conversation.id}/messages`)
+          .doc(lastMessage.id),
+        members,
+        lastSend: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const createConversation = (recipientId) =>
+  firebase
+    .firestore()
+    .collection('conversations')
+    .add({
+      lastMessage: null,
+      lastSend: firebase.firestore.FieldValue.serverTimestamp(),
+      members: [recipientId, firebase.auth().currentUser.uid],
+    });
