@@ -39,18 +39,18 @@ export const EventsUpdate = ({ route, navigation }) => {
     }
   };
 
-  const onEventAdd = async () => {
+  const onEventUpdate = async () => {
     try {
       await updateEventRequest({
-        id: event.id,
-        eventName,
+        eventId: event.id,
+        name: eventName,
         address,
         city,
         maxPeople,
         startDate,
         duration,
         level,
-        selectedCategory,
+        categoryId: selectedCategory,
       });
       navigation.goBack();
     } catch (e) {
@@ -153,7 +153,7 @@ export const EventsUpdate = ({ route, navigation }) => {
             />
           </Spacer>
           <Spacer>
-            <ButtonOrange onPress={onEventAdd}>
+            <ButtonOrange onPress={onEventUpdate}>
               <Text color="white" bold center>
                 Mettre à jour
               </Text>

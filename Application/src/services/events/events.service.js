@@ -78,7 +78,12 @@ export const changeEventStatusRequest = async (event, user, isAccepted) => {
 };
 
 export const updateEventRequest = async (event) => {
-  return firebase.firestore().collection('events').doc(event.id).update(event);
+  console.log(event);
+  return firebase
+    .firestore()
+    .collection('events')
+    .doc(event.eventId)
+    .update(event);
 };
 
 export const getCreatedEventsRequest = async (userId) => {
