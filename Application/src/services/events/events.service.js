@@ -131,3 +131,16 @@ export const getRegisteredEventsRequest = async (userId) => {
     })
   );
 };
+
+export const getAvailablesPlaces = (event) => {
+  if (event.members) {
+    return (
+      event.maxPeople -
+      Object.entries(event.members).filter(
+        ([key, value]) => value === 'accepted'
+      ).length
+    );
+  }
+
+  return event.maxPeople;
+};

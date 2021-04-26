@@ -37,6 +37,7 @@ import {
 import waiting from '../../../../assets/waiting.js';
 import { ImageBoxCenter } from '../../../components/ui/image';
 import { getUsersByArray } from '../../../services/authentication/authentication.service';
+import { getAvailablesPlaces } from '../../../services/events/events.service';
 import { Ionicons } from '@expo/vector-icons';
 
 export const EventsShow = ({ navigation, route }) => {
@@ -56,6 +57,7 @@ export const EventsShow = ({ navigation, route }) => {
           )
         );
   const [eventMembers, setEventMembers] = useState(initialEventMembers);
+  const availablesPlaces = getAvailablesPlaces(event);
 
   const onEventJoin = async () => {
     try {
@@ -163,8 +165,7 @@ export const EventsShow = ({ navigation, route }) => {
             <PaddingX>
               <EventCardFooter>
                 <Text md bold>
-                  {event.maxPeople - (Object.keys(event.members).length || 0)}{' '}
-                  places restantes
+                  {availablesPlaces} places restantes
                 </Text>
                 <TouchableOpacity
                   onPress={() =>

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { getAvailablesPlaces } from '../../../../services/events/events.service';
 import { Spacer } from '../../../../components/ui/spacer';
 import { Text } from '../../../../components/ui/text';
 import {
@@ -18,6 +19,8 @@ import {
 import { Avatar } from '../../../../components/ui/avatar';
 
 export const EventCard = ({ event = {} }) => {
+  let availablesPlaces = getAvailablesPlaces(event);
+
   return (
     <EventCardContainer>
       <PaddingX>
@@ -66,8 +69,7 @@ export const EventCard = ({ event = {} }) => {
         <PaddingX>
           <EventCardFooter>
             <Text md bold>
-              {event.maxPeople - (Object.keys(event.members).length || 0)}{' '}
-              places restantes
+              {availablesPlaces} places restantes
             </Text>
             <EventCardInfosItem>
               <Spacer position="right" size="md">
