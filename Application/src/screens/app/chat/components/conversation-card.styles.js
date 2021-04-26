@@ -1,6 +1,12 @@
 import styled from 'styled-components/native';
 import { FlatList } from 'react-native';
 
+export const CenterView = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const ConversationCardContainer = styled.View`
   background-color: white;
   padding: 16px;
