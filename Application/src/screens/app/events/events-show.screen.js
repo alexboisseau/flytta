@@ -37,13 +37,18 @@ import {
 import waiting from '../../../../assets/waiting.js';
 import { ImageBoxCenter } from '../../../components/ui/image';
 import { getUsersByArray } from '../../../services/authentication/authentication.service';
-import { getAvailablesPlaces } from '../../../services/events/events.service';
+import {
+  getAvailablesPlaces,
+  getCreatorData,
+} from '../../../services/events/events.service';
 import { Ionicons } from '@expo/vector-icons';
+import { Avatar } from '../../../components/ui/avatar';
 
 export const EventsShow = ({ navigation, route }) => {
   const { event, redirectScreen } = route.params;
   const { user } = useContext(AuthenticationContext);
   const [membersData, setMembersData] = useState([]);
+  const [creatorData, setCreatorData] = useState({});
   const initialEventMembers =
     user.uid === event.creatorId
       ? Object.fromEntries(
@@ -99,10 +104,22 @@ export const EventsShow = ({ navigation, route }) => {
     }
   };
 
+  const getCreator = async (event) => {
+    try {
+      const userData = await getCreatorData(event.creatorId);
+      userData.docs.map((doc) => {
+        setCreatorData(doc.data());
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     if (Object.keys(eventMembers).length > 0) {
       getMembersData(eventMembers);
     }
+    getCreator(event);
   }, [eventMembers]);
 
   return (
@@ -175,12 +192,19 @@ export const EventsShow = ({ navigation, route }) => {
                   }
                 >
                   <EventCardInfosItem>
-                    <EventCardInfosItemIcon
-                      name="ios-person-circle"
-                      size={32}
-                      color="gray"
-                    />
-                    <EventCardInfosItemText>Thomas Ln</EventCardInfosItemText>
+                    <Spacer position="right" size="md">
+                      <Avatar
+                        size={35}
+                        source={
+                          creatorData.avatar
+                            ? { uri: creatorData.avatar }
+                            : require('../../../../assets/user-avatar-default.png')
+                        }
+                      />
+                    </Spacer>
+                    <EventCardInfosItemText>
+                      {creatorData.firstName} {creatorData.lastName}
+                    </EventCardInfosItemText>
                   </EventCardInfosItem>
                 </TouchableOpacity>
               </EventCardFooter>

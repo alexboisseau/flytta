@@ -143,3 +143,11 @@ export const getAvailablesPlaces = (event) => {
 
   return event.maxPeople;
 };
+
+export const getCreatorData = async (creatorId) => {
+  return await firebase
+    .firestore()
+    .collection('users')
+    .where('userId', '==', creatorId)
+    .get();
+};
