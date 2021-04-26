@@ -16,6 +16,7 @@ import {
   ErrorContainer,
 } from './components/guest.styles';
 import { Text } from '../../components/ui/text';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -69,7 +70,14 @@ export const LoginScreen = ({ navigation }) => {
           <Spacer position="top" size="xl">
             <Separator />
           </Spacer>
-          <Spacer position="top" size="xl">
+          <Spacer position="top" size="lg">
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ForgotPassword')}
+            >
+              <Text color="white">Mot de passe oublié</Text>
+            </TouchableOpacity>
+          </Spacer>
+          <Spacer position="top" size="lg">
             <AuthButton
               color="primaryLight"
               onPress={() => onLogin(email, password)}

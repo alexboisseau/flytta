@@ -14,6 +14,7 @@ export const Text = styled.Text`
   ${({ right }) => right && 'text-align: right;'}
   ${({ sm, theme }) => sm && `font-size: ${theme.fontSizes.sm}`}
   ${({ lg, theme }) => lg && `font-size: ${theme.fontSizes.lg}`}
+  ${({ xs, theme }) => xs && `font-size: ${theme.fontSizes.xs}`}
   ${({ bold, theme }) => bold && `font-weight: ${theme.fontWeights.bold};`}
 `;
 

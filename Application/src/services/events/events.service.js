@@ -1,5 +1,4 @@
 import * as firebase from 'firebase';
-import { get } from 'react-native/Libraries/Utilities/PixelRatio';
 import { getByRef } from '../utils/functions';
 
 export const addEventRequest = (
